@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="1_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/entities/tower.tscn" id="2_tower"]
-[ext_resource type="PackedScene" path="res://scenes/entities/build_slot.tscn" id="3_slot"]
+[ext_resource type="Script" path="res://scripts/managers/grid_manager.gd" id="3_grid"]
 [ext_resource type="Script" path="res://scripts/managers/wave_spawner.gd" id="4_spawn"]
 [ext_resource type="Script" path="res://scripts/managers/build_manager.gd" id="5_build"]
 [ext_resource type="Resource" path="res://data/waves/wave_01.tres" id="6_wave1"]
@@ -11,7 +11,7 @@
 
 [sub_resource type="Curve2D" id="curve_path"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 80, 540, 0, 0, 0, 0, 640, 540, 0, 0, 0, 0, 640, 220, 0, 0, 0, 0, 1280, 220, 0, 0, 0, 0, 1280, 760, 0, 0, 0, 0, 1840, 760)
+"points": PackedVector2Array(0, 0, 0, 0, 32, 544, 0, 0, 0, 0, 672, 544, 0, 0, 0, 0, 672, 224, 0, 0, 0, 0, 1312, 224, 0, 0, 0, 0, 1312, 736, 0, 0, 0, 0, 1888, 736)
 }
 point_count = 6
 
@@ -21,61 +21,31 @@ point_count = 6
 offset_right = 1920.0
 offset_bottom = 1080.0
 color = Color(0.12, 0.14, 0.18, 1)
+mouse_filter = 2
+
+[node name="GridManager" type="Node2D" parent="."]
+script = ExtResource("3_grid")
+grid_origin = Vector2(0, 64)
+cell_size = 64
+columns = 30
+rows = 14
+path_waypoints = Array[Vector2i]([Vector2i(0, 7), Vector2i(10, 7), Vector2i(10, 2), Vector2i(20, 2), Vector2i(20, 10), Vector2i(29, 10)])
 
 [node name="EnemyPath" type="Path2D" parent="."]
 curve = SubResource("curve_path")
 
-[node name="PathVisual" type="Line2D" parent="EnemyPath"]
-points = PackedVector2Array(80, 540, 640, 540, 640, 220, 1280, 220, 1280, 760, 1840, 760)
-width = 40.0
-default_color = Color(0.25, 0.22, 0.18, 1)
-
-[node name="BuildSlots" type="Node2D" parent="."]
-
-[node name="Slot1" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(360, 620)
-
-[node name="Slot2" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(360, 460)
-
-[node name="Slot3" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(560, 380)
-
-[node name="Slot4" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(740, 380)
-
-[node name="Slot5" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(940, 140)
-
-[node name="Slot6" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(940, 300)
-
-[node name="Slot7" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(1200, 480)
-
-[node name="Slot8" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(1360, 480)
-
-[node name="Slot9" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(1560, 680)
-
-[node name="Slot10" parent="BuildSlots" instance=ExtResource("3_slot")]
-position = Vector2(1560, 840)
-
 [node name="Towers" type="Node2D" parent="."]
-
-[node name="Enemies" type="Node2D" parent="."]
 
 [node name="Projectiles" type="Node2D" parent="."]
 
 [node name="WaveSpawner" type="Node" parent="."]
 script = ExtResource("4_spawn")
 enemy_scene = ExtResource("1_enemy")
-waves = Array[Resource]([ExtResource("6_wave1"), ExtResource("7_wave2"), ExtResource("8_wave3")])
-path = NodePath("../EnemyPath")
-enemies_container = NodePath("../Enemies")
+waves = [ExtResource("6_wave1"), ExtResource("7_wave2"), ExtResource("8_wave3")]
+path_node = NodePath("../EnemyPath")
 
 [node name="BuildManager" type="Node" parent="."]
 script = ExtResource("5_build")
 tower_scene = ExtResource("2_tower")
-towers_container = NodePath("../Towers")
+grid_node = NodePath("../GridManager")
+towers_container_node = NodePath("../Towers")

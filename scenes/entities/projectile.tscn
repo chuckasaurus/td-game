@@ -1,21 +1,18 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/entities/projectile.gd" id="1_proj"]
 
-[sub_resource type="PlaceholderTexture2D" id="ph_proj"]
-size = Vector2(8, 8)
-
 [sub_resource type="CircleShape2D" id="shape_proj"]
-radius = 4.0
+radius = 5.0
 
 [node name="Projectile" type="Area2D"]
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_proj")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("ph_proj")
-modulate = Color(1, 0.95, 0.4, 1)
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(1, 0.95, 0.4, 1)
+polygon = PackedVector2Array(-5, -5, 5, -5, 5, 5, -5, 5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("shape_proj")

@@ -7,15 +7,15 @@ var _damage: int = 10
 var _last_dir: Vector2 = Vector2.ZERO
 var _life_remaining: float = 3.0
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var body: Polygon2D = $Body
 
 
 func launch(target: Enemy, tower_data: TowerData) -> void:
 	_target = target
 	_speed = tower_data.projectile_speed
 	_damage = tower_data.damage
-	if sprite:
-		sprite.modulate = tower_data.projectile_color
+	if body:
+		body.color = tower_data.projectile_color
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
 
@@ -38,14 +38,15 @@ func _physics_process(delta: float) -> void:
 	rotation = dir.angle()
 
 
-func _on_body_entered(body: Node) -> void:
-	if body is Enemy and body == _target:
-		body.take_damage(_damage)
-		queue_free()
+func _on_body_entered(_body_node: Node) -> void:
+	_try_hit(_body_node)
 
 
 func _on_area_entered(area: Area2D) -> void:
-	var p := area.get_parent()
-	if p is Enemy and p == _target:
-		p.take_damage(_damage)
+	_try_hit(area.get_parent())
+
+
+func _try_hit(node: Node) -> void:
+	if node is Enemy and node == _target:
+		node.take_damage(_damage)
 		queue_free()

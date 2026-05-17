@@ -9,12 +9,11 @@ signal died(enemy: Enemy)
 var current_hp: int = 0
 var _is_dead: bool = false
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var body: Polygon2D = $Body
 @onready var hp_bar: ProgressBar = $HpBar
 
 
 func _ready() -> void:
-	# Loop is off so enemies stop at the end of the path.
 	loop = false
 	rotates = false
 	if data:
@@ -29,10 +28,8 @@ func configure(enemy_data: EnemyData) -> void:
 
 func _apply_data() -> void:
 	current_hp = data.max_hp
-	if sprite:
-		sprite.modulate = data.color_tint
-		if data.sprite:
-			sprite.texture = data.sprite
+	if body:
+		body.color = data.color_tint
 	if hp_bar:
 		hp_bar.max_value = data.max_hp
 		hp_bar.value = current_hp
@@ -60,7 +57,7 @@ func take_damage(amount: int) -> void:
 
 
 func _compute_damage_after_armor(raw: int) -> int:
-	# Simple linear armor curve: each point of armor reduces 1% damage, capped at 80%.
+	# Simple linear armor curve: each armor point reduces 1% damage, cap 80%.
 	var reduction := clampf(float(data.armor) * 0.01, 0.0, 0.8)
 	return maxi(1, int(round(float(raw) * (1.0 - reduction))))
 
