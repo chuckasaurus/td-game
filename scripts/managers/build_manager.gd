@@ -25,19 +25,27 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if grid == null:
 		return
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		var world_pos := grid.get_global_mouse_position()
-		var cell := grid.world_to_cell(world_pos)
-		if _selected_tower_data == null:
-			# No build pending — clicking an occupied cell selects that tower;
-			# clicking anywhere else closes the inspector.
-			var occupant := grid.get_occupant(cell)
-			if occupant != null and is_instance_valid(occupant):
-				EventBus.tower_clicked.emit(occupant)
-			else:
-				EventBus.tower_inspector_closed.emit()
-			return
-		_attempt_build(cell)
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			var world_pos := grid.get_global_mouse_position()
+			var cell := grid.world_to_cell(world_pos)
+			if _selected_tower_data == null:
+				# No build pending — clicking an occupied cell selects that
+				# tower; clicking anywhere else closes the inspector.
+				var occupant := grid.get_occupant(cell)
+				if occupant != null and is_instance_valid(occupant):
+					EventBus.tower_clicked.emit(occupant)
+				else:
+					EventBus.tower_inspector_closed.emit()
+				return
+			_attempt_build(cell)
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			# Right-click cancels current selection (inspector + tower picker).
+			EventBus.tower_inspector_closed.emit()
+			EventBus.cancel_build_selection.emit()
+			_selected_tower_data = null
+			if grid:
+				grid.set_preview_range(0.0, Color.WHITE)
 
 
 func _on_tower_button_selected(tower_data: Resource) -> void:

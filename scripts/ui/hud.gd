@@ -35,6 +35,8 @@ func _ready() -> void:
 	EventBus.wave_started.connect(_on_wave_event)
 	EventBus.wave_completed.connect(_on_wave_event)
 	EventBus.tower_clicked.connect(_on_tower_clicked_untoggle_build)
+	EventBus.tower_placed.connect(_on_tower_placed)
+	EventBus.cancel_build_selection.connect(_on_cancel_build_selection)
 
 	start_wave_button.pressed.connect(_on_start_wave_pressed)
 	dev_eagle_eye_button.toggled.connect(_on_dev_eagle_toggled)
@@ -45,6 +47,20 @@ func _ready() -> void:
 
 func _on_tower_clicked_untoggle_build(_tower: Node) -> void:
 	# Clicking an existing tower drops any pending placement.
+	if _selected_button:
+		_selected_button.button_pressed = false
+
+
+func _on_tower_placed(_tower: Node) -> void:
+	# Deselect the picker after a single placement so the cursor isn't locked.
+	# Hold Ctrl while clicking to keep building the same tower repeatedly.
+	if Input.is_key_pressed(KEY_CTRL):
+		return
+	if _selected_button:
+		_selected_button.button_pressed = false
+
+
+func _on_cancel_build_selection() -> void:
 	if _selected_button:
 		_selected_button.button_pressed = false
 
