@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TowerData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1"]
+[ext_resource type="Resource" path="res://data/elements/electric.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Spark"
+cost = 35
+damage = 10
+range_radius = 200.0
+fire_rate = 1.4
+projectile_speed = 800.0
+projectile_color = Color(1, 0.95, 0.3, 1)
+element = ExtResource("2")
+chain_targets = 3
+chain_decay = 0.7
+can_target_flying = true
+status_chance = 1.0

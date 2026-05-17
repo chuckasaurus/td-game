@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/maps/map_01.tscn" id="1_map"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
-[ext_resource type="Resource" path="res://data/towers/basic_tower.tres" id="3_basic"]
+[ext_resource type="Resource" path="res://data/towers/arrow_tower.tres" id="3_arrow"]
+[ext_resource type="Resource" path="res://data/towers/flame_tower.tres" id="4_flame"]
+[ext_resource type="Resource" path="res://data/towers/frost_bolt.tres" id="5_frost"]
+[ext_resource type="Resource" path="res://data/towers/spark.tres" id="6_spark"]
+[ext_resource type="Resource" path="res://data/towers/toxin_spray.tres" id="7_toxin"]
+[ext_resource type="Resource" path="res://data/towers/mist.tres" id="8_mist"]
+[ext_resource type="Resource" path="res://data/towers/boulder.tres" id="9_boulder"]
+[ext_resource type="Resource" path="res://data/towers/gale.tres" id="10_gale"]
 
 [node name="Main" type="Node2D"]
 
@@ -10,4 +17,4 @@
 
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
 spawner_path = NodePath("../Map01/WaveSpawner")
-available_towers = Array[Resource]([ExtResource("3_basic")])
+available_towers = Array[Resource]([ExtResource("3_arrow"), ExtResource("4_flame"), ExtResource("5_frost"), ExtResource("6_spark"), ExtResource("7_toxin"), ExtResource("8_mist"), ExtResource("9_boulder"), ExtResource("10_gale")])

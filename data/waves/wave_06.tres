@@ -3,27 +3,27 @@
 [ext_resource type="Script" path="res://scripts/resources/wave_data.gd" id="1_wave"]
 [ext_resource type="Script" path="res://scripts/resources/spawn_group.gd" id="2_sg"]
 [ext_resource type="Resource" path="res://data/enemies/basic_creep.tres" id="3_basic"]
-[ext_resource type="Resource" path="res://data/enemies/fast_creep.tres" id="4_fast"]
+[ext_resource type="Resource" path="res://data/enemies/magic_resistant_creep.tres" id="4_mr"]
 
 [sub_resource type="Resource" id="sg_1"]
 script = ExtResource("2_sg")
 enemy = ExtResource("3_basic")
-count = 8
+count = 6
 spawn_interval = 0.7
 initial_delay = 0.0
 
 [sub_resource type="Resource" id="sg_2"]
 script = ExtResource("2_sg")
-enemy = ExtResource("4_fast")
-count = 4
-spawn_interval = 0.5
-initial_delay = 4.0
+enemy = ExtResource("4_mr")
+count = 3
+spawn_interval = 1.8
+initial_delay = 4.5
 
 [resource]
 script = ExtResource("1_wave")
-display_name = "Goblins + Wolves"
+display_name = "Warlock Coven"
 wave_kind = 0
 spawn_groups = [SubResource("sg_1"), SubResource("sg_2")]
 pre_wave_delay = 2.0
-clear_bonus = 30
-primary_enemy_for_ui = ExtResource("4_fast")
+clear_bonus = 50
+primary_enemy_for_ui = ExtResource("4_mr")

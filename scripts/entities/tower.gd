@@ -8,6 +8,7 @@ var _enemies_in_range: Array[Node] = []
 var _cooldown: float = 0.0
 
 @onready var body: Polygon2D = $Body
+@onready var body_accent: Polygon2D = $BodyAccent
 @onready var range_area: Area2D = $RangeArea
 @onready var range_shape: CollisionShape2D = $RangeArea/CollisionShape2D
 @onready var muzzle: Marker2D = $Muzzle
@@ -32,6 +33,12 @@ func _apply_data() -> void:
 	var shape := range_shape.shape as CircleShape2D
 	if shape:
 		shape.radius = data.range_radius
+	# Color the tower body from its element (or fall back to default).
+	if data.element and body:
+		var c := data.element.color
+		body.color = c
+		if body_accent:
+			body_accent.color = Color(c.r * 0.5, c.g * 0.5, c.b * 0.5, 1)
 
 
 func _process(delta: float) -> void:
@@ -78,11 +85,18 @@ func _pick_target() -> Enemy:
 	_enemies_in_range = _enemies_in_range.filter(func(e): return is_instance_valid(e))
 	if _enemies_in_range.is_empty():
 		return null
-	# Target the enemy furthest along the path (closest to the goal).
+	# Filter: flying enemies only targetable by towers with can_target_flying;
+	# stunned enemies are temporarily un-targetable.
 	var best: Enemy = null
 	var best_progress := -INF
 	for e in _enemies_in_range:
-		if e is Enemy and e.progress_ratio > best_progress:
+		if not (e is Enemy):
+			continue
+		if e.data.is_flying and not data.can_target_flying:
+			continue
+		if e.has_status(&"stunned"):
+			continue
+		if e.progress_ratio > best_progress:
 			best = e
 			best_progress = e.progress_ratio
 	return best

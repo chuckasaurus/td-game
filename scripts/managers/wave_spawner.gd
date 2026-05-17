@@ -12,6 +12,7 @@ var _alive_count: int = 0
 var _wave_in_progress: bool = false
 var _current_wave_index: int = -1
 var _spawned_this_wave: int = 0
+var _target_spawn_count: int = 0
 
 
 func _ready() -> void:
@@ -28,6 +29,18 @@ func _ready() -> void:
 
 func has_more_waves() -> bool:
 	return _current_wave_index + 1 < waves.size()
+
+
+func get_upcoming_waves(n: int) -> Array:
+	var upcoming: Array = []
+	var start := _current_wave_index + (1 if _wave_in_progress else 1)
+	for i in range(start, mini(start + n, waves.size())):
+		upcoming.append(waves[i])
+	return upcoming
+
+
+func get_current_wave_index() -> int:
+	return _current_wave_index
 
 
 func start_next_wave() -> void:
@@ -47,6 +60,7 @@ func start_next_wave() -> void:
 		push_error("Wave at index %d is not a WaveData" % _current_wave_index)
 		_wave_in_progress = false
 		return
+	_target_spawn_count = wave.total_count()
 	EventBus.wave_started.emit(_current_wave_index)
 	if wave.pre_wave_delay > 0.0:
 		await get_tree().create_timer(wave.pre_wave_delay).timeout
@@ -54,20 +68,28 @@ func start_next_wave() -> void:
 
 
 func _spawn_loop(wave: WaveData) -> void:
-	while _spawned_this_wave < wave.count and _wave_in_progress:
-		_spawn_one(wave.enemy)
-		_spawned_this_wave += 1
-		if _spawned_this_wave < wave.count:
-			await get_tree().create_timer(wave.spawn_interval).timeout
+	for group in wave.spawn_groups:
+		if group == null or not _wave_in_progress:
+			continue
+		if group.initial_delay > 0.0:
+			await get_tree().create_timer(group.initial_delay).timeout
+		for i in group.count:
+			if not _wave_in_progress:
+				return
+			_spawn_one(group.enemy)
+			_spawned_this_wave += 1
+			if i < group.count - 1:
+				await get_tree().create_timer(group.spawn_interval).timeout
 
 
 func _spawn_one(enemy_data: EnemyData) -> void:
 	if enemy_data == null:
-		push_warning("Wave has null enemy data")
+		push_warning("Wave has null enemy data in a spawn group")
 		return
 	var enemy := enemy_scene.instantiate()
 	path.add_child(enemy)
 	enemy.progress = 0.0
+	enemy.add_to_group(&"enemies")
 	if enemy.has_method("configure"):
 		enemy.configure(enemy_data)
 	_alive_count += 1
@@ -83,7 +105,7 @@ func _on_enemy_removed(_enemy: Node, _gold: int = 0) -> void:
 
 func _check_wave_end() -> void:
 	var wave: WaveData = waves[_current_wave_index] as WaveData
-	if _spawned_this_wave >= wave.count and _alive_count <= 0:
+	if _spawned_this_wave >= _target_spawn_count and _alive_count <= 0:
 		_wave_in_progress = false
 		GameState.add_gold(wave.clear_bonus)
 		EventBus.wave_completed.emit(_current_wave_index)

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ArmorShredStatus" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/statuses/armor_shred_status.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"armor_shredded"
+display_name = "Armor Shredded"
+duration = 4.0
+tick_interval = 0.0
+stackable = false
+icon_color = Color(1, 0.9, 0.5, 1)
+shred_amount = 15

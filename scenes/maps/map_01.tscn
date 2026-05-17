@@ -1,17 +1,22 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="1_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/entities/tower.tscn" id="2_tower"]
 [ext_resource type="Script" path="res://scripts/managers/grid_manager.gd" id="3_grid"]
 [ext_resource type="Script" path="res://scripts/managers/wave_spawner.gd" id="4_spawn"]
 [ext_resource type="Script" path="res://scripts/managers/build_manager.gd" id="5_build"]
-[ext_resource type="Resource" path="res://data/waves/wave_01.tres" id="6_wave1"]
-[ext_resource type="Resource" path="res://data/waves/wave_02.tres" id="7_wave2"]
-[ext_resource type="Resource" path="res://data/waves/wave_03.tres" id="8_wave3"]
+[ext_resource type="Resource" path="res://data/waves/wave_01.tres" id="6_w1"]
+[ext_resource type="Resource" path="res://data/waves/wave_02.tres" id="7_w2"]
+[ext_resource type="Resource" path="res://data/waves/wave_03.tres" id="8_w3"]
+[ext_resource type="Resource" path="res://data/waves/wave_04.tres" id="9_w4"]
+[ext_resource type="Resource" path="res://data/waves/wave_05.tres" id="10_w5"]
+[ext_resource type="Resource" path="res://data/waves/wave_06.tres" id="11_w6"]
+[ext_resource type="Resource" path="res://data/waves/wave_07.tres" id="12_w7"]
+[ext_resource type="Resource" path="res://data/waves/wave_08.tres" id="13_w8"]
 
 [sub_resource type="Curve2D" id="curve_path"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 32, 544, 0, 0, 0, 0, 672, 544, 0, 0, 0, 0, 672, 224, 0, 0, 0, 0, 1312, 224, 0, 0, 0, 0, 1312, 736, 0, 0, 0, 0, 1888, 736)
+"points": PackedVector2Array(0, 0, 0, 0, 32, 624, 0, 0, 0, 0, 672, 624, 0, 0, 0, 0, 672, 304, 0, 0, 0, 0, 1312, 304, 0, 0, 0, 0, 1312, 816, 0, 0, 0, 0, 1888, 816)
 }
 point_count = 6
 
@@ -25,10 +30,10 @@ mouse_filter = 2
 
 [node name="GridManager" type="Node2D" parent="."]
 script = ExtResource("3_grid")
-grid_origin = Vector2(0, 64)
+grid_origin = Vector2(0, 144)
 cell_size = 64
 columns = 30
-rows = 14
+rows = 13
 path_waypoints = Array[Vector2i]([Vector2i(0, 7), Vector2i(10, 7), Vector2i(10, 2), Vector2i(20, 2), Vector2i(20, 10), Vector2i(29, 10)])
 
 [node name="EnemyPath" type="Path2D" parent="."]
@@ -41,7 +46,7 @@ curve = SubResource("curve_path")
 [node name="WaveSpawner" type="Node" parent="."]
 script = ExtResource("4_spawn")
 enemy_scene = ExtResource("1_enemy")
-waves = [ExtResource("6_wave1"), ExtResource("7_wave2"), ExtResource("8_wave3")]
+waves = [ExtResource("6_w1"), ExtResource("7_w2"), ExtResource("8_w3"), ExtResource("9_w4"), ExtResource("10_w5"), ExtResource("11_w6"), ExtResource("12_w7"), ExtResource("13_w8")]
 path_node = NodePath("../EnemyPath")
 
 [node name="BuildManager" type="Node" parent="."]

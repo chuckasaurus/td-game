@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="StatusEffect" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/status_effect.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"frozen"
+display_name = "Frozen"
+duration = 1.0
+tick_interval = 0.0
+magnitude = 0.0
+stackable = false
+icon_color = Color(0.7, 0.95, 1, 1)

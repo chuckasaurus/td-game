@@ -4,11 +4,11 @@
 
 [resource]
 script = ExtResource("1")
-display_name = "Goblin"
-max_hp = 50
+display_name = "Bat"
+max_hp = 40
 max_armor = 0
-speed = 80.0
-gold_reward = 5
-is_flying = false
+speed = 100.0
+gold_reward = 8
+is_flying = true
 magic_resistant = false
-color_tint = Color(0.95, 0.35, 0.35, 1)
+color_tint = Color(0.7, 0.5, 0.85, 1)

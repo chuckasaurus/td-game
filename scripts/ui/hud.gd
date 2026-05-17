@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 @export var spawner_path: NodePath
-@export var available_towers: Array[TowerData] = []
+@export var available_towers: Array[Resource] = []
 
 @onready var gold_label: Label = %GoldLabel
 @onready var lives_label: Label = %LivesLabel
@@ -9,6 +9,7 @@ extends CanvasLayer
 @onready var phase_label: Label = %PhaseLabel
 @onready var tower_button_container: HBoxContainer = %TowerButtons
 @onready var start_wave_button: Button = %StartWaveButton
+@onready var wave_track: HBoxContainer = %WaveTrack
 @onready var game_over_panel: PanelContainer = %GameOverPanel
 @onready var victory_panel: PanelContainer = %VictoryPanel
 
@@ -26,20 +27,23 @@ func _ready() -> void:
 	GameState.wave_index_changed.connect(_refresh_wave)
 	GameState.phase_changed.connect(_refresh_phase)
 
+	EventBus.wave_started.connect(_on_wave_event)
+	EventBus.wave_completed.connect(_on_wave_event)
+
 	start_wave_button.pressed.connect(_on_start_wave_pressed)
 	_build_tower_buttons()
-
-	game_over_panel.visible = false
-	victory_panel.visible = false
+	call_deferred("_refresh_wave_track")
 
 
 func _build_tower_buttons() -> void:
 	for child in tower_button_container.get_children():
 		child.queue_free()
 	for tower_data in available_towers:
+		if not (tower_data is TowerData):
+			continue
 		var btn := Button.new()
 		btn.text = "%s\n%dg" % [tower_data.display_name, tower_data.cost]
-		btn.custom_minimum_size = Vector2(120, 60)
+		btn.custom_minimum_size = Vector2(110, 60)
 		btn.toggle_mode = true
 		btn.pressed.connect(_on_tower_button_pressed.bind(btn, tower_data))
 		tower_button_container.add_child(btn)
@@ -56,6 +60,70 @@ func _on_start_wave_pressed() -> void:
 	var spawner: WaveSpawner = get_node_or_null(spawner_path)
 	if spawner and spawner.has_method("start_next_wave"):
 		spawner.start_next_wave()
+
+
+func _on_wave_event(_idx: int) -> void:
+	_refresh_wave_track()
+
+
+func _refresh_wave_track() -> void:
+	for child in wave_track.get_children():
+		child.queue_free()
+	var spawner: WaveSpawner = get_node_or_null(spawner_path)
+	if spawner == null:
+		return
+	var upcoming := spawner.get_upcoming_waves(5)
+	var current_idx := spawner.get_current_wave_index()
+	for i in upcoming.size():
+		var wave: WaveData = upcoming[i]
+		# Wave number is 1-based; upcoming[0] is at index current_idx+1, which
+		# is wave number current_idx+2 to the player.
+		var wave_number := current_idx + i + 2
+		wave_track.add_child(_make_wave_card(wave, wave_number))
+
+
+func _make_wave_card(wave: WaveData, wave_number: int) -> Control:
+	var card := PanelContainer.new()
+	card.custom_minimum_size = Vector2(120, 64)
+	var vbox := VBoxContainer.new()
+	vbox.custom_minimum_size = Vector2(110, 56)
+	card.add_child(vbox)
+
+	var header := HBoxContainer.new()
+	vbox.add_child(header)
+	var num := Label.new()
+	num.text = "W%d" % wave_number
+	header.add_child(num)
+	var kind_marker := _kind_marker(wave.wave_kind)
+	if kind_marker != "":
+		var kind_label := Label.new()
+		kind_label.text = " %s" % kind_marker
+		header.add_child(kind_label)
+
+	var row := HBoxContainer.new()
+	vbox.add_child(row)
+	var color_rect := ColorRect.new()
+	color_rect.custom_minimum_size = Vector2(16, 16)
+	color_rect.color = wave.primary_enemy_for_ui.color_tint if wave.primary_enemy_for_ui else Color.WHITE
+	row.add_child(color_rect)
+	var name_label := Label.new()
+	name_label.text = " %s" % wave.display_name
+	name_label.add_theme_font_size_override("font_size", 11)
+	row.add_child(name_label)
+
+	return card
+
+
+func _kind_marker(kind: int) -> String:
+	match kind:
+		WaveData.WaveKind.BOSS:
+			return "☠"
+		WaveData.WaveKind.DRAFT:
+			return "★"
+		WaveData.WaveKind.EVENT:
+			return "⚑"
+		_:
+			return ""
 
 
 func _refresh_gold(value: int) -> void:

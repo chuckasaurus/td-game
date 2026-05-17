@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DotStatus" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/statuses/dot_status.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"burning"
+display_name = "Burning"
+duration = 3.0
+tick_interval = 0.5
+stackable = true
+icon_color = Color(1, 0.5, 0.2, 1)
+damage_per_tick = 4

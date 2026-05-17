@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ElementData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/element_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"water"
+display_name = "Water"
+color = Color(0.4, 0.7, 1, 1)
+description = "Applies Wet. Weak solo; amplifies Electric (+50%) and Ice (+25% slow, Frozen trigger)."

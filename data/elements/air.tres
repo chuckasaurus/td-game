@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ElementData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/element_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"air"
+display_name = "Air"
+color = Color(0.85, 0.92, 1, 1)
+description = "Fast attack speed with 20% crit chance (3x damage)."

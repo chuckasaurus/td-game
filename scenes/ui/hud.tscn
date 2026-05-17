@@ -8,26 +8,36 @@ script = ExtResource("1_hud")
 [node name="TopBar" type="PanelContainer" parent="."]
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 56.0
+offset_bottom = 144.0
 
-[node name="TopRow" type="HBoxContainer" parent="TopBar"]
+[node name="VBox" type="VBoxContainer" parent="TopBar"]
+custom_constants/separation = 6
+
+[node name="TopRow" type="HBoxContainer" parent="TopBar/VBox"]
 custom_constants/separation = 32
 
-[node name="GoldLabel" type="Label" parent="TopBar/TopRow"]
+[node name="GoldLabel" type="Label" parent="TopBar/VBox/TopRow"]
 unique_name_in_owner = true
 text = "Gold: 0"
 
-[node name="LivesLabel" type="Label" parent="TopBar/TopRow"]
+[node name="LivesLabel" type="Label" parent="TopBar/VBox/TopRow"]
 unique_name_in_owner = true
 text = "Lives: 0"
 
-[node name="WaveLabel" type="Label" parent="TopBar/TopRow"]
+[node name="WaveLabel" type="Label" parent="TopBar/VBox/TopRow"]
 unique_name_in_owner = true
 text = "Wave: 0"
 
-[node name="PhaseLabel" type="Label" parent="TopBar/TopRow"]
+[node name="PhaseLabel" type="Label" parent="TopBar/VBox/TopRow"]
 unique_name_in_owner = true
 text = "Preparing"
+
+[node name="WaveTrackLabel" type="Label" parent="TopBar/VBox"]
+text = "Upcoming:"
+
+[node name="WaveTrack" type="HBoxContainer" parent="TopBar/VBox"]
+unique_name_in_owner = true
+custom_constants/separation = 6
 
 [node name="BottomBar" type="PanelContainer" parent="."]
 anchors_preset = 12
@@ -37,10 +47,11 @@ anchor_bottom = 1.0
 offset_top = -100.0
 
 [node name="BottomRow" type="HBoxContainer" parent="BottomBar"]
+custom_constants/separation = 6
 
 [node name="TowerButtons" type="HBoxContainer" parent="BottomBar/BottomRow"]
 unique_name_in_owner = true
-custom_constants/separation = 8
+custom_constants/separation = 6
 
 [node name="Spacer" type="Control" parent="BottomBar/BottomRow"]
 size_flags_horizontal = 3
@@ -52,6 +63,7 @@ text = "Start Wave"
 
 [node name="GameOverPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -69,6 +81,7 @@ text = "Game Over"
 
 [node name="VictoryPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

@@ -2,20 +2,20 @@
 
 [ext_resource type="Script" path="res://scripts/resources/wave_data.gd" id="1_wave"]
 [ext_resource type="Script" path="res://scripts/resources/spawn_group.gd" id="2_sg"]
-[ext_resource type="Resource" path="res://data/enemies/basic_creep.tres" id="3_basic"]
+[ext_resource type="Resource" path="res://data/enemies/flying_creep.tres" id="3_fly"]
 
 [sub_resource type="Resource" id="sg_1"]
 script = ExtResource("2_sg")
-enemy = ExtResource("3_basic")
-count = 8
-spawn_interval = 0.9
+enemy = ExtResource("3_fly")
+count = 6
+spawn_interval = 1.0
 initial_delay = 0.0
 
 [resource]
 script = ExtResource("1_wave")
-display_name = "Goblin Scouts"
-wave_kind = 0
+display_name = "Bat Swarm"
+wave_kind = 2
 spawn_groups = [SubResource("sg_1")]
-pre_wave_delay = 1.5
-clear_bonus = 25
-primary_enemy_for_ui = ExtResource("3_basic")
+pre_wave_delay = 2.0
+clear_bonus = 40
+primary_enemy_for_ui = ExtResource("3_fly")
