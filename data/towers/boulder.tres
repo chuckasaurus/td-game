@@ -18,3 +18,7 @@ on_hit_status = ExtResource("3")
 armor_pen = 0.5
 can_target_flying = false
 status_chance = 0.15
+attack_kind = 1
+linear_speed = 260.0
+linear_lifetime = 2.2
+linear_pierce_falloff = 1.0

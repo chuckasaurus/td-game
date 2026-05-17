@@ -1,14 +1,16 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/entities/tower.gd" id="1_tower"]
 [ext_resource type="PackedScene" path="res://scenes/entities/projectile.tscn" id="2_proj"]
+[ext_resource type="PackedScene" path="res://scenes/entities/projectile_linear.tscn" id="3_proj_lin"]
 
 [sub_resource type="CircleShape2D" id="shape_range"]
 radius = 220.0
 
 [node name="Tower" type="Node2D"]
 script = ExtResource("1_tower")
-projectile_scene = ExtResource("2_proj")
+homing_projectile_scene = ExtResource("2_proj")
+linear_projectile_scene = ExtResource("3_proj_lin")
 
 [node name="Body" type="Polygon2D" parent="."]
 color = Color(0.35, 0.6, 1, 1)

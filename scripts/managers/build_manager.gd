@@ -33,6 +33,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_tower_button_selected(tower_data: Resource) -> void:
 	_selected_tower_data = tower_data as TowerData
+	if grid:
+		if _selected_tower_data:
+			var color: Color = _selected_tower_data.element.color if _selected_tower_data.element else Color(0.95, 0.85, 0.55, 1)
+			grid.set_preview_range(_selected_tower_data.range_radius, color)
+		else:
+			grid.set_preview_range(0.0, Color.WHITE)
 
 
 func _attempt_build(cell: Vector2i) -> void:

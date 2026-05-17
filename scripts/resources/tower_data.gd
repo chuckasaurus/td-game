@@ -1,6 +1,8 @@
 class_name TowerData
 extends Resource
 
+enum AttackKind { HOMING, LINEAR_PIERCE, BEAM_CHAIN, CLOUD_DROP }
+
 @export var display_name: String = "Tower"
 @export var cost: int = 20
 @export var damage: int = 10
@@ -28,11 +30,28 @@ extends Resource
 ## Air, and any combo containing those elements.
 @export var can_target_flying: bool = false
 
-## --- Behaviour flags driven by tower.gd ---
+## --- Attack delivery shape ---
 
-## > 0 = AoE splash damage at the projectile's impact point.
+@export var attack_kind: AttackKind = AttackKind.HOMING
+
+## > 0 = AoE splash damage at the projectile's impact point (HOMING only).
 @export var splash_radius: float = 0.0
-## > 0 = projectile chains to nearby enemies after first hit.
+
+# LINEAR_PIERCE — projectile rolls in a straight line from fire position.
+@export var linear_speed: float = 280.0
+@export var linear_lifetime: float = 1.8
+## Damage multiplier applied per pierce. 1.0 = no falloff, 0.7 = -30% per pierce.
+@export var linear_pierce_falloff: float = 1.0
+
+# BEAM_CHAIN — instant-hit zap that chains to nearby enemies.
 @export var chain_targets: int = 0
-## Damage decay per chain jump (0..1).
+## Damage multiplier per chain jump (compounds).
 @export var chain_decay: float = 0.7
+## Max distance from the previous link to chain to the next enemy.
+@export var chain_range: float = 200.0
+
+# CLOUD_DROP — lobbed projectile spawns a persistent area on impact.
+@export var cloud_radius: float = 60.0
+@export var cloud_duration: float = 4.0
+@export var cloud_tick_interval: float = 0.5
+@export var cloud_damage_per_tick: int = 2

@@ -16,6 +16,10 @@ extends Node2D
 @export var hover_ok_color: Color = Color(0.3, 1, 0.4, 0.35)
 @export var hover_bad_color: Color = Color(1, 0.3, 0.3, 0.30)
 
+## Set by BuildManager when a tower is selected. > 0 = draw range ring at hover cell.
+var preview_range_radius: float = 0.0
+var preview_range_color: Color = Color(1, 1, 1, 1)
+
 var _path_cells: Dictionary = {}
 var _occupied: Dictionary = {}
 var _hover_cell: Vector2i = Vector2i(-9999, -9999)
@@ -114,3 +118,16 @@ func _draw() -> void:
 		var hover_color := hover_ok_color if is_buildable(_hover_cell) else hover_bad_color
 		var hover_top_left := origin + Vector2(_hover_cell.x * cell_size, _hover_cell.y * cell_size)
 		draw_rect(Rect2(hover_top_left, size), hover_color)
+		# Range ring preview
+		if preview_range_radius > 0.0:
+			var center := cell_to_world_center(_hover_cell)
+			var fill := Color(preview_range_color.r, preview_range_color.g, preview_range_color.b, 0.10)
+			var outline := Color(preview_range_color.r, preview_range_color.g, preview_range_color.b, 0.7)
+			draw_circle(center, preview_range_radius, fill)
+			draw_arc(center, preview_range_radius, 0.0, TAU, 64, outline, 2.0)
+
+
+func set_preview_range(radius: float, color: Color) -> void:
+	preview_range_radius = radius
+	preview_range_color = color
+	queue_redraw()
