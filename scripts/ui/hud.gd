@@ -46,9 +46,7 @@ func _ready() -> void:
 
 
 func _on_tower_clicked_untoggle_build(_tower: Node) -> void:
-	# Clicking an existing tower drops any pending placement.
-	if _selected_button:
-		_selected_button.button_pressed = false
+	_deselect_picker()
 
 
 func _on_tower_placed(_tower: Node) -> void:
@@ -56,13 +54,11 @@ func _on_tower_placed(_tower: Node) -> void:
 	# Hold Ctrl while clicking to keep building the same tower repeatedly.
 	if Input.is_key_pressed(KEY_CTRL):
 		return
-	if _selected_button:
-		_selected_button.button_pressed = false
+	_deselect_picker()
 
 
 func _on_cancel_build_selection() -> void:
-	if _selected_button:
-		_selected_button.button_pressed = false
+	_deselect_picker()
 
 
 func _on_dev_eagle_toggled(pressed: bool) -> void:
@@ -89,15 +85,29 @@ func _build_tower_buttons() -> void:
 		btn.text = "%s\n%dg" % [tower_data.display_name, tower_data.cost]
 		btn.custom_minimum_size = Vector2(110, 60)
 		btn.toggle_mode = true
-		btn.pressed.connect(_on_tower_button_pressed.bind(btn, tower_data))
+		# Use toggled (not pressed) so programmatic state changes also flow
+		# through this handler.
+		btn.toggled.connect(_on_tower_button_toggled.bind(btn, tower_data))
 		tower_button_container.add_child(btn)
 
 
-func _on_tower_button_pressed(btn: Button, tower_data: TowerData) -> void:
-	if _selected_button and _selected_button != btn:
+func _on_tower_button_toggled(toggled_on: bool, btn: Button, tower_data: TowerData) -> void:
+	if toggled_on:
+		if _selected_button and _selected_button != btn:
+			_selected_button.set_pressed_no_signal(false)
+		_selected_button = btn
+		EventBus.tower_button_selected.emit(tower_data)
+	else:
+		if _selected_button == btn:
+			_selected_button = null
+		EventBus.tower_button_selected.emit(null)
+
+
+func _deselect_picker() -> void:
+	# Setting button_pressed = false fires the toggled signal which handles
+	# state cleanup (clears _selected_button and emits tower_button_selected(null)).
+	if _selected_button:
 		_selected_button.button_pressed = false
-	_selected_button = btn if btn.button_pressed else null
-	EventBus.tower_button_selected.emit(tower_data if btn.button_pressed else null)
 
 
 func _on_start_wave_pressed() -> void:

@@ -16,8 +16,17 @@ func _ready() -> void:
 	EventBus.tower_clicked.connect(_on_tower_clicked)
 	EventBus.tower_buffs_changed.connect(_on_buffs_changed)
 	EventBus.tower_sold.connect(_on_tower_sold)
+	EventBus.tower_inspector_closed.connect(_on_inspector_close_event)
 	sell_button.pressed.connect(_on_sell_pressed)
 	close_button.pressed.connect(close)
+
+
+func _on_inspector_close_event() -> void:
+	# Respond to external close requests (right-click, empty-grid click, etc.)
+	# without re-emitting the signal — close() handles its own emission path.
+	if visible:
+		visible = false
+		_tower = null
 
 
 func _on_tower_clicked(tower: Node) -> void:
