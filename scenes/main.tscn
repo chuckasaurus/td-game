@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/maps/map_01.tscn" id="1_map"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
@@ -10,6 +10,15 @@
 [ext_resource type="Resource" path="res://data/towers/mist.tres" id="8_mist"]
 [ext_resource type="Resource" path="res://data/towers/boulder.tres" id="9_boulder"]
 [ext_resource type="Resource" path="res://data/towers/gale.tres" id="10_gale"]
+[ext_resource type="PackedScene" path="res://scenes/ui/element_draft_panel.tscn" id="11_draft"]
+[ext_resource type="Script" path="res://scripts/managers/run_controller.gd" id="12_run"]
+[ext_resource type="Resource" path="res://data/elements/fire.tres" id="13_fire"]
+[ext_resource type="Resource" path="res://data/elements/water.tres" id="14_water"]
+[ext_resource type="Resource" path="res://data/elements/ice.tres" id="15_ice"]
+[ext_resource type="Resource" path="res://data/elements/electric.tres" id="16_electric"]
+[ext_resource type="Resource" path="res://data/elements/earth.tres" id="17_earth"]
+[ext_resource type="Resource" path="res://data/elements/air.tres" id="18_air"]
+[ext_resource type="Resource" path="res://data/elements/poison.tres" id="19_poison"]
 
 [node name="Main" type="Node2D"]
 
@@ -18,3 +27,10 @@
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
 spawner_path = NodePath("../Map01/WaveSpawner")
 available_towers = Array[Resource]([ExtResource("3_arrow"), ExtResource("4_flame"), ExtResource("5_frost"), ExtResource("6_spark"), ExtResource("7_toxin"), ExtResource("8_mist"), ExtResource("9_boulder"), ExtResource("10_gale")])
+
+[node name="ElementDraftPanel" parent="HUD" instance=ExtResource("11_draft")]
+
+[node name="RunController" type="Node" parent="."]
+script = ExtResource("12_run")
+element_pool = Array[Resource]([ExtResource("13_fire"), ExtResource("14_water"), ExtResource("15_ice"), ExtResource("16_electric"), ExtResource("17_earth"), ExtResource("18_air"), ExtResource("19_poison")])
+draft_panel_path = NodePath("../HUD/ElementDraftPanel")

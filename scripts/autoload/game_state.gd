@@ -1,11 +1,12 @@
 extends Node
 
-enum Phase { PREPARING, WAVE_ACTIVE, BETWEEN_WAVES, VICTORY, GAME_OVER }
+enum Phase { PREPARING, WAVE_ACTIVE, BETWEEN_WAVES, VICTORY, GAME_OVER, DRAFTING }
 
 signal gold_changed(new_value: int)
 signal lives_changed(new_value: int)
 signal phase_changed(new_phase: Phase)
 signal wave_index_changed(new_value: int)
+signal drafted_elements_changed
 
 var gold: int = 100:
 	set(value):
@@ -31,6 +32,9 @@ var phase: Phase = Phase.PREPARING:
 		phase = value
 		phase_changed.emit(phase)
 
+## Elements drafted for the current run.
+var drafted_elements: Array[ElementData] = []
+
 
 func _ready() -> void:
 	EventBus.enemy_killed.connect(_on_enemy_killed)
@@ -50,6 +54,31 @@ func reset_run() -> void:
 	lives = 20
 	current_wave = 0
 	phase = Phase.PREPARING
+	clear_drafted_elements()
+
+
+func add_drafted_element(element: ElementData) -> void:
+	if element == null:
+		return
+	for e in drafted_elements:
+		if e.id == element.id:
+			return
+	drafted_elements.append(element)
+	drafted_elements_changed.emit()
+
+
+func has_drafted(element_id: StringName) -> bool:
+	for e in drafted_elements:
+		if e.id == element_id:
+			return true
+	return false
+
+
+func clear_drafted_elements() -> void:
+	if drafted_elements.is_empty():
+		return
+	drafted_elements.clear()
+	drafted_elements_changed.emit()
 
 
 func spend_gold(amount: int) -> bool:

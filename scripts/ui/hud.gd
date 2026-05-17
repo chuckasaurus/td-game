@@ -37,6 +37,7 @@ func _ready() -> void:
 	EventBus.tower_clicked.connect(_on_tower_clicked_untoggle_build)
 	EventBus.tower_placed.connect(_on_tower_placed)
 	EventBus.cancel_build_selection.connect(_on_cancel_build_selection)
+	GameState.drafted_elements_changed.connect(_build_tower_buttons)
 
 	start_wave_button.pressed.connect(_on_start_wave_pressed)
 	dev_eagle_eye_button.toggled.connect(_on_dev_eagle_toggled)
@@ -78,8 +79,13 @@ func _on_dev_poison_toggled(pressed: bool) -> void:
 func _build_tower_buttons() -> void:
 	for child in tower_button_container.get_children():
 		child.queue_free()
+	_selected_button = null
 	for tower_data in available_towers:
 		if not (tower_data is TowerData):
+			continue
+		# Element-bound towers only appear if their element has been drafted.
+		# Arrow Tower (no element) is always available.
+		if tower_data.element != null and not GameState.has_drafted(tower_data.element.id):
 			continue
 		var btn := Button.new()
 		btn.text = "%s\n%dg" % [tower_data.display_name, tower_data.cost]
