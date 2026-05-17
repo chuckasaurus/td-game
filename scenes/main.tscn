@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/map_01.tscn" id="1_map"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
+[ext_resource type="Resource" path="res://data/towers/basic_tower.tres" id="3_basic"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Map01" parent="." instance=ExtResource("1_map")]
+
+[node name="HUD" parent="." instance=ExtResource("2_hud")]
+spawner_path = NodePath("../Map01/WaveSpawner")
+available_towers = Array[Resource]([ExtResource("3_basic")])

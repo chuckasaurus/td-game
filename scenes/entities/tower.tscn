@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/entities/tower.gd" id="1_tower"]
+[ext_resource type="PackedScene" path="res://scenes/entities/projectile.tscn" id="2_proj"]
+
+[sub_resource type="PlaceholderTexture2D" id="ph_tower"]
+size = Vector2(32, 32)
+
+[sub_resource type="CircleShape2D" id="shape_range"]
+radius = 150.0
+
+[node name="Tower" type="Node2D"]
+script = ExtResource("1_tower")
+projectile_scene = ExtResource("2_proj")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("ph_tower")
+modulate = Color(0.4, 0.7, 1, 1)
+
+[node name="RangeArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+monitoring = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeArea"]
+shape = SubResource("shape_range")
+
+[node name="Muzzle" type="Marker2D" parent="."]

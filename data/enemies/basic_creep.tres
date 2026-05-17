@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Goblin"
+max_hp = 50
+speed = 80.0
+gold_reward = 5
+armor = 0
+is_flying = false
+color_tint = Color(0.95, 0.35, 0.35, 1)

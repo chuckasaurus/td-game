@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Apprentice"
+cost = 25
+damage = 10
+range_radius = 220.0
+fire_rate = 1.5
+projectile_speed = 600.0
+projectile_color = Color(1, 0.95, 0.4, 1)
+element_id = &""
+splash_radius = 0.0
+chain_targets = 0
+armor_pen = 0.0
+crit_chance = 0.0
+crit_multiplier = 1.0

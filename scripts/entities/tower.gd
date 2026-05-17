@@ -1,0 +1,104 @@
+class_name Tower
+extends Node2D
+
+@export var data: TowerData
+@export var projectile_scene: PackedScene
+
+var _enemies_in_range: Array[Node] = []
+var _cooldown: float = 0.0
+
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var range_area: Area2D = $RangeArea
+@onready var range_shape: CollisionShape2D = $RangeArea/CollisionShape2D
+@onready var muzzle: Marker2D = $Muzzle
+
+
+func configure(tower_data: TowerData) -> void:
+	data = tower_data
+	if is_node_ready():
+		_apply_data()
+
+
+func _ready() -> void:
+	range_area.body_entered.connect(_on_body_entered)
+	range_area.body_exited.connect(_on_body_exited)
+	range_area.area_entered.connect(_on_area_entered)
+	range_area.area_exited.connect(_on_area_exited)
+	if data:
+		_apply_data()
+
+
+func _apply_data() -> void:
+	if sprite and data.sprite:
+		sprite.texture = data.sprite
+	# Resize range circle to match tower data
+	var shape := range_shape.shape as CircleShape2D
+	if shape:
+		shape.radius = data.range_radius
+
+
+func _process(delta: float) -> void:
+	if data == null:
+		return
+	if _cooldown > 0.0:
+		_cooldown -= delta
+	if _cooldown <= 0.0:
+		var target := _pick_target()
+		if target:
+			_fire(target)
+			_cooldown = 1.0 / maxf(0.01, data.fire_rate)
+
+
+# Track in-range enemies via either physics bodies or areas, since Enemy is a
+# PathFollow2D with an Area2D child — Area2D detects child Area2Ds, not bodies.
+func _on_body_entered(body: Node) -> void:
+	if body is Enemy:
+		_enemies_in_range.append(body)
+
+
+func _on_body_exited(body: Node) -> void:
+	_enemies_in_range.erase(body)
+
+
+func _on_area_entered(area: Area2D) -> void:
+	var enemy := _enemy_from_area(area)
+	if enemy and not _enemies_in_range.has(enemy):
+		_enemies_in_range.append(enemy)
+
+
+func _on_area_exited(area: Area2D) -> void:
+	var enemy := _enemy_from_area(area)
+	if enemy:
+		_enemies_in_range.erase(enemy)
+
+
+func _enemy_from_area(area: Area2D) -> Enemy:
+	# Enemy's hitbox is an Area2D whose parent is the Enemy node.
+	var p := area.get_parent()
+	if p is Enemy:
+		return p
+	return null
+
+
+func _pick_target() -> Enemy:
+	_enemies_in_range = _enemies_in_range.filter(func(e): return is_instance_valid(e))
+	if _enemies_in_range.is_empty():
+		return null
+	# Default policy: target the enemy furthest along the path (closest to the goal).
+	var best: Enemy = null
+	var best_progress := -INF
+	for e in _enemies_in_range:
+		if e is Enemy and e.progress_ratio > best_progress:
+			best = e
+			best_progress = e.progress_ratio
+	return best
+
+
+func _fire(target: Enemy) -> void:
+	if projectile_scene == null:
+		return
+	var proj := projectile_scene.instantiate()
+	get_tree().current_scene.add_child(proj)
+	proj.global_position = muzzle.global_position if muzzle else global_position
+	if proj.has_method("launch"):
+		proj.launch(target, data)

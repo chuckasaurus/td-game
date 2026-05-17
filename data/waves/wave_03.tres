@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WaveData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/wave_data.gd" id="1_script"]
+[ext_resource type="Resource" path="res://data/enemies/basic_creep.tres" id="2_creep"]
+
+[resource]
+script = ExtResource("1_script")
+enemy = ExtResource("2_creep")
+count = 18
+spawn_interval = 0.55
+pre_wave_delay = 2.0
+clear_bonus = 50
