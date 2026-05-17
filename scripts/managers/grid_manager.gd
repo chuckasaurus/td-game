@@ -67,6 +67,10 @@ func is_occupied(cell: Vector2i) -> bool:
 	return _occupied.has(cell)
 
 
+func get_occupant(cell: Vector2i) -> Node:
+	return _occupied.get(cell)
+
+
 func is_buildable(cell: Vector2i) -> bool:
 	return is_in_bounds(cell) and not is_path(cell) and not is_occupied(cell)
 

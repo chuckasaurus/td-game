@@ -22,7 +22,6 @@ var _cooldown: float = 0.0
 @onready var body_accent: Polygon2D = $BodyAccent
 @onready var range_area: Area2D = $RangeArea
 @onready var range_shape: CollisionShape2D = $RangeArea/CollisionShape2D
-@onready var click_area: Area2D = $ClickArea
 @onready var muzzle: Marker2D = $Muzzle
 
 
@@ -38,7 +37,6 @@ func _ready() -> void:
 	range_area.body_exited.connect(_on_body_exited)
 	range_area.area_entered.connect(_on_area_entered)
 	range_area.area_exited.connect(_on_area_exited)
-	click_area.input_event.connect(_on_click_area_input)
 	BuffRegistry.class_buffs_changed.connect(_recompute_effective_data)
 	if base_data:
 		_apply_visual_from_data()
@@ -308,13 +306,7 @@ func _spawn_beam_segment(from: Vector2, to: Vector2, color: Color) -> void:
 	tween.tween_callback(line.queue_free)
 
 
-# ─── Selection / sell ─────────────────────────────────────────────────────
-
-func _on_click_area_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		EventBus.tower_clicked.emit(self)
-		get_viewport().set_input_as_handled()
-
+# ─── Sell ─────────────────────────────────────────────────────────────────
 
 func sell() -> void:
 	var refund: int = int(round(float(base_data.cost) * 0.75))

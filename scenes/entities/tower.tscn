@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/entities/tower.gd" id="1_tower"]
 [ext_resource type="PackedScene" path="res://scenes/entities/projectile.tscn" id="2_proj"]
@@ -6,9 +6,6 @@
 
 [sub_resource type="CircleShape2D" id="shape_range"]
 radius = 220.0
-
-[sub_resource type="RectangleShape2D" id="shape_click"]
-size = Vector2(44, 44)
 
 [node name="Tower" type="Node2D"]
 script = ExtResource("1_tower")
@@ -30,13 +27,5 @@ monitoring = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RangeArea"]
 shape = SubResource("shape_range")
-
-[node name="ClickArea" type="Area2D" parent="."]
-input_pickable = true
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea"]
-shape = SubResource("shape_click")
 
 [node name="Muzzle" type="Marker2D" parent="."]
