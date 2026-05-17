@@ -13,6 +13,9 @@ signal all_waves_completed()
 
 signal tower_placed(tower: Node)
 signal tower_sold(tower: Node, refund: int)
+signal tower_clicked(tower: Node)
+signal tower_buffs_changed(tower: Node)
+signal tower_inspector_closed
 signal request_build(tower_data: Resource, slot: Node)
 
 signal build_slot_selected(slot: Node)

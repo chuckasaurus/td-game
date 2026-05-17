@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1")
+class_id = &"toxin_spray"
 display_name = "Toxin Spray"
 cost = 28
 damage = 4

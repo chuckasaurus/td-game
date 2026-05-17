@@ -18,6 +18,8 @@ func _ready() -> void:
 	if towers_container == null:
 		push_warning("BuildManager towers_container not found; defaulting to current scene")
 	EventBus.tower_button_selected.connect(_on_tower_button_selected)
+	EventBus.tower_sold.connect(_on_tower_sold)
+	EventBus.tower_clicked.connect(_on_tower_clicked)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -25,6 +27,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if _selected_tower_data == null:
+			# Clicking empty grid with no build selection closes the inspector.
+			EventBus.tower_inspector_closed.emit()
 			return
 		var world_pos := grid.get_global_mouse_position()
 		var cell := grid.world_to_cell(world_pos)
@@ -41,16 +45,31 @@ func _on_tower_button_selected(tower_data: Resource) -> void:
 			grid.set_preview_range(0.0, Color.WHITE)
 
 
+func _on_tower_clicked(_tower: Node) -> void:
+	# When player selects an existing tower, drop any pending placement.
+	_selected_tower_data = null
+	if grid:
+		grid.set_preview_range(0.0, Color.WHITE)
+
+
+func _on_tower_sold(tower: Node, refund: int) -> void:
+	GameState.add_gold(refund)
+	if grid and tower is Tower:
+		var cell: Vector2i = tower.grid_cell
+		if cell.x >= 0 and cell.y >= 0:
+			grid.clear_occupied(cell)
+
+
 func _attempt_build(cell: Vector2i) -> void:
 	if not grid.is_buildable(cell):
 		return
 	if not GameState.spend_gold(_selected_tower_data.cost):
 		return
-	var tower := tower_scene.instantiate() as Node2D
+	var tower := tower_scene.instantiate() as Tower
 	var parent: Node = towers_container if towers_container else get_tree().current_scene
 	parent.add_child(tower)
 	tower.global_position = grid.cell_to_world_center(cell)
-	if tower.has_method("configure"):
-		tower.configure(_selected_tower_data)
+	tower.grid_cell = cell
+	tower.configure(_selected_tower_data)
 	grid.set_occupied(cell, tower)
 	EventBus.tower_placed.emit(tower)

@@ -3,6 +3,10 @@ extends Resource
 
 enum AttackKind { HOMING, LINEAR_PIERCE, BEAM_CHAIN, CLOUD_DROP }
 
+## Identifier used by class-wide buffs (e.g. &"arrow_tower", &"flame_tower").
+## All towers built from this data share the same class_id.
+@export var class_id: StringName = &""
+
 @export var display_name: String = "Tower"
 @export var cost: int = 20
 @export var damage: int = 10

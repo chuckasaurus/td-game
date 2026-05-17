@@ -23,10 +23,15 @@ var preview_range_color: Color = Color(1, 1, 1, 1)
 var _path_cells: Dictionary = {}
 var _occupied: Dictionary = {}
 var _hover_cell: Vector2i = Vector2i(-9999, -9999)
+var _selected_tower: Node = null
 
 
 func _ready() -> void:
 	_build_path_cells()
+	EventBus.tower_clicked.connect(_on_tower_clicked)
+	EventBus.tower_buffs_changed.connect(_on_tower_buffs_changed)
+	EventBus.tower_sold.connect(_on_tower_sold)
+	EventBus.tower_inspector_closed.connect(_on_inspector_closed)
 	queue_redraw()
 
 
@@ -118,7 +123,7 @@ func _draw() -> void:
 		var hover_color := hover_ok_color if is_buildable(_hover_cell) else hover_bad_color
 		var hover_top_left := origin + Vector2(_hover_cell.x * cell_size, _hover_cell.y * cell_size)
 		draw_rect(Rect2(hover_top_left, size), hover_color)
-		# Range ring preview
+		# Range ring preview at hover cell
 		if preview_range_radius > 0.0:
 			var center := cell_to_world_center(_hover_cell)
 			var fill := Color(preview_range_color.r, preview_range_color.g, preview_range_color.b, 0.10)
@@ -126,8 +131,39 @@ func _draw() -> void:
 			draw_circle(center, preview_range_radius, fill)
 			draw_arc(center, preview_range_radius, 0.0, TAU, 64, outline, 2.0)
 
+	# Range ring around the currently-selected tower
+	if _selected_tower and is_instance_valid(_selected_tower) and _selected_tower.effective_data:
+		var ed: TowerData = _selected_tower.effective_data
+		if ed.range_radius > 0.0:
+			var sel_color: Color = ed.element.color if ed.element else Color(0.9, 0.85, 0.55, 1)
+			var sel_fill := Color(sel_color.r, sel_color.g, sel_color.b, 0.08)
+			var sel_outline := Color(sel_color.r, sel_color.g, sel_color.b, 0.7)
+			draw_circle(_selected_tower.global_position, ed.range_radius, sel_fill)
+			draw_arc(_selected_tower.global_position, ed.range_radius, 0.0, TAU, 64, sel_outline, 2.0)
+
 
 func set_preview_range(radius: float, color: Color) -> void:
 	preview_range_radius = radius
 	preview_range_color = color
+	queue_redraw()
+
+
+func _on_tower_clicked(tower: Node) -> void:
+	_selected_tower = tower
+	queue_redraw()
+
+
+func _on_tower_buffs_changed(tower: Node) -> void:
+	if tower == _selected_tower:
+		queue_redraw()
+
+
+func _on_tower_sold(tower: Node, _refund: int) -> void:
+	if tower == _selected_tower:
+		_selected_tower = null
+		queue_redraw()
+
+
+func _on_inspector_closed() -> void:
+	_selected_tower = null
 	queue_redraw()

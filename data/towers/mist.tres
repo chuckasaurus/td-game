@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1")
+class_id = &"mist"
 display_name = "Mist"
 cost = 25
 damage = 4

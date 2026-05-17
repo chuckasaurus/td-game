@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1")
+class_id = &"gale"
 display_name = "Gale"
 cost = 35
 damage = 6

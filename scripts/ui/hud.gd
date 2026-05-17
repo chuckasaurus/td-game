@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+const EAGLE_EYE: TowerBuff = preload("res://data/buffs/eagle_eye.tres")
+const POISON_ARROWS: TowerBuff = preload("res://data/buffs/poison_arrows.tres")
+
 @export var spawner_path: NodePath
 @export var available_towers: Array[Resource] = []
 
@@ -12,6 +15,8 @@ extends CanvasLayer
 @onready var wave_track: HBoxContainer = %WaveTrack
 @onready var game_over_panel: PanelContainer = %GameOverPanel
 @onready var victory_panel: PanelContainer = %VictoryPanel
+@onready var dev_eagle_eye_button: Button = %DevEagleEyeButton
+@onready var dev_poison_arrows_button: Button = %DevPoisonArrowsButton
 
 var _selected_button: Button = null
 
@@ -29,10 +34,33 @@ func _ready() -> void:
 
 	EventBus.wave_started.connect(_on_wave_event)
 	EventBus.wave_completed.connect(_on_wave_event)
+	EventBus.tower_clicked.connect(_on_tower_clicked_untoggle_build)
 
 	start_wave_button.pressed.connect(_on_start_wave_pressed)
+	dev_eagle_eye_button.toggled.connect(_on_dev_eagle_toggled)
+	dev_poison_arrows_button.toggled.connect(_on_dev_poison_toggled)
 	_build_tower_buttons()
 	call_deferred("_refresh_wave_track")
+
+
+func _on_tower_clicked_untoggle_build(_tower: Node) -> void:
+	# Clicking an existing tower drops any pending placement.
+	if _selected_button:
+		_selected_button.button_pressed = false
+
+
+func _on_dev_eagle_toggled(pressed: bool) -> void:
+	if pressed:
+		BuffRegistry.add_class_buff(EAGLE_EYE)
+	else:
+		BuffRegistry.remove_class_buff(EAGLE_EYE)
+
+
+func _on_dev_poison_toggled(pressed: bool) -> void:
+	if pressed:
+		BuffRegistry.add_class_buff(POISON_ARROWS)
+	else:
+		BuffRegistry.remove_class_buff(POISON_ARROWS)
 
 
 func _build_tower_buttons() -> void:

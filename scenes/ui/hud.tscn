@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/tower_inspector.tscn" id="2_inspector"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -56,10 +57,26 @@ custom_constants/separation = 6
 [node name="Spacer" type="Control" parent="BottomBar/BottomRow"]
 size_flags_horizontal = 3
 
+[node name="DevEagleEyeButton" type="Button" parent="BottomBar/BottomRow"]
+unique_name_in_owner = true
+toggle_mode = true
+custom_minimum_size = Vector2(150, 60)
+text = "DEV
+Eagle Eye"
+
+[node name="DevPoisonArrowsButton" type="Button" parent="BottomBar/BottomRow"]
+unique_name_in_owner = true
+toggle_mode = true
+custom_minimum_size = Vector2(150, 60)
+text = "DEV
+Poison Arrows"
+
 [node name="StartWaveButton" type="Button" parent="BottomBar/BottomRow"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 60)
 text = "Start Wave"
+
+[node name="TowerInspector" parent="." instance=ExtResource("2_inspector")]
 
 [node name="GameOverPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true

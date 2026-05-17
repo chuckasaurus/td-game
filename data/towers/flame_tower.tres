@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1")
+class_id = &"flame_tower"
 display_name = "Flame Tower"
 cost = 30
 damage = 12
