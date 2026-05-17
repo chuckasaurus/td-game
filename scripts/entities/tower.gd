@@ -63,7 +63,8 @@ func add_instance_buff(buff: TowerBuff) -> void:
 
 
 func remove_instance_buff(buff: TowerBuff) -> void:
-	if instance_buffs.erase(buff):
+	if instance_buffs.has(buff):
+		instance_buffs.erase(buff)
 		_recompute_effective_data()
 
 

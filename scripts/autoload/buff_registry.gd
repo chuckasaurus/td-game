@@ -13,7 +13,8 @@ func add_class_buff(buff: TowerBuff) -> void:
 
 
 func remove_class_buff(buff: TowerBuff) -> void:
-	if _class_buffs.erase(buff):
+	if _class_buffs.has(buff):
+		_class_buffs.erase(buff)
 		class_buffs_changed.emit()
 
 
