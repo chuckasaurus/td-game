@@ -1,5 +1,5 @@
 {
-  "_comment": "FLUX.1 schnell basic text-to-image workflow. Uses CheckpointLoaderSimple targeting the Comfy-Org all-in-one fp8 checkpoint at models/checkpoints/flux1-schnell-fp8.safetensors (UNet + CLIP + VAE bundled). The asset-forge agent substitutes the placeholders below before POSTing to /prompt. Placeholders: __PROMPT__, __SEED__, __WIDTH__, __HEIGHT__, __FILENAME_PREFIX__.",
+  "_comment": "FLUX.1 schnell text-to-image workflow with automatic background removal via InspyrenetRembg (transparent-background library). Pipeline: CheckpointLoaderSimple -> CLIPTextEncode -> KSampler -> VAEDecode -> InspyrenetRembg -> SaveImage. The output PNG has a proper alpha channel. Placeholders the asset-forge agent substitutes: __PROMPT__, __SEED__, __WIDTH__, __HEIGHT__, __FILENAME_PREFIX__.",
   "1": {
     "class_type": "CheckpointLoaderSimple",
     "inputs": {
@@ -50,11 +50,18 @@
       "vae": ["1", 2]
     }
   },
+  "10": {
+    "class_type": "InspyrenetRembg",
+    "inputs": {
+      "image": ["8", 0],
+      "torchscript_jit": "default"
+    }
+  },
   "9": {
     "class_type": "SaveImage",
     "inputs": {
       "filename_prefix": "__FILENAME_PREFIX__",
-      "images": ["8", 0]
+      "images": ["10", 0]
     }
   }
 }

@@ -119,17 +119,18 @@ Color identity per element. The element's primary color is ~60% of the sprite, w
 5. The exact prompt prefix of the winner is locked into the "Standard prompt prefix" section above
 6. Status moves to LOCKED, this section gets updated with the new direction details
 
-## Post-processing: transparent backgrounds
+## Post-processing: transparent backgrounds — AUTOMATED
 
-The locked prompt asks for "plain neutral background" — production sprites need this stripped to alpha. Workflow:
+Background removal is now built into the workflow. The generation pipeline runs:
 
-1. Generate the asset normally via the locked prompt (this produces a 1024×1024 PNG with a neutral-color background)
-2. Run background removal as a post-process before downscaling to final sprite size
-3. Downscale with nearest-neighbor to the target resolution from the category table above
+1. `CheckpointLoaderSimple` → `CLIPTextEncode` → `KSampler` → `VAEDecode` produces the raw 1024×1024 image
+2. **`InspyrenetRembg` strips the background to alpha** (using the `transparent-background` library via the `ComfyUI-Inspyrenet-Rembg` custom node)
+3. `SaveImage` writes the resulting RGBA PNG with proper transparency
 
-**Background removal options** (decide once, install once):
-- `rembg` Python CLI — install via `pip install rembg[cpu]` or `rembg[gpu]`, then `rembg i input.png output.png`. Fast, decent quality, accepts CPU or GPU.
-- `BiRefNet` — newer, much better quality especially for fine details (rope, leaves, hair); GPU-required for speed.
-- ComfyUI custom node — adds a node directly to the workflow (e.g. `ComfyUI-Inspyrenet-Rembg`), so background removal happens as part of the generation pipeline. Installable via ComfyUI-Manager.
+The agent's submitted workflows already include this. Outputs from `assets/sprites/*` should have clean alpha channels straight from generation. No separate post-process step.
 
-Current install: **none of the above present.** The agent currently saves PNGs with the original neutral background. Pick one of the above and update this section + the agent when ready.
+**Downscaling** to the category's final sprite size (96px for towers, 48px for enemies, etc.) is still a separate step — typically nearest-neighbor for pixel-perfect feel.
+
+**If background removal quality is poor on a specific asset**, two knobs:
+- Swap the node to `InspyrenetRembgAdvanced` and tune the `threshold` parameter (0.0–1.0). Lower threshold = aggressive cutout (may remove subject pixels). Higher = conservative (may leave background bleed).
+- Regenerate with a different seed — sometimes the model's framing makes the cutout harder.
