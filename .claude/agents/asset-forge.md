@@ -32,6 +32,10 @@ These files in the project's `.art/` directory are the contract:
 - **`.art/workflows/flux_schnell_tile.json`** — text-to-image WITHOUT background removal. Use for **tile/fill subjects where the background IS the asset** (ground textures, path tiles, sky/background panels). The output PNG is fully opaque.
 
 Both templates share the same placeholders: `__PROMPT__`, `__SEED__`, `__WIDTH__`, `__HEIGHT__`, `__FILENAME_PREFIX__`. Pick the right template based on category. When in doubt: anything that needs to sit *on top of* other art uses the basic (rembg) workflow; anything that fills a rectangle uses the tile workflow.
+
+**Workflow files are valid JSON ready for direct ComfyUI `/prompt` submission.** No comment-stripping or preprocessing needed — substitute placeholders in the raw text and concatenate the POST body as `'{"prompt":' + workflow_json_string + ',"client_id":"asset-forge"}'`.
+
+**PowerShell 5.1 gotcha:** `ConvertTo-Json` flattens nested mixed-type arrays like `["1", 0]` into the string `"1 0"`, which corrupts workflow node references. Always build the workflow JSON via raw-string substitution and concatenate the POST body as a string — never round-trip the workflow object through `ConvertFrom-Json | ConvertTo-Json`.
 - **`.art/anchors/`** — reference images. The canonical style anchor (when set) lives here as `style_anchor.png`.
 - **`.art/generated.json`** — chronological manifest of every asset produced. Append after every successful generation; never delete entries.
 
