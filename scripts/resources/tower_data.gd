@@ -10,7 +10,7 @@ enum AttackKind { HOMING, LINEAR_PIERCE, BEAM_CHAIN, CLOUD_DROP }
 @export var display_name: String = "Tower"
 @export var cost: int = 20
 @export var damage: int = 10
-@export var range_radius: float = 150.0
+@export var range_radius: float = 225.0
 ## Shots per second.
 @export var fire_rate: float = 1.0
 @export var projectile_speed: float = 400.0
