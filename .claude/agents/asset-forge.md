@@ -32,7 +32,13 @@ These files in the project's `.art/` directory are the contract:
 - **`.art/anchors/`** — reference images. The canonical style anchor (when set) lives here as `style_anchor.png`.
 - **`.art/generated.json`** — chronological manifest of every asset produced. Append after every successful generation; never delete entries.
 
-**Always read `.art/style_guide.md` at the start of every invocation.** If the guide says the style anchor is not yet established (status: SCAFFOLD), do NOT generate production assets — instead report this to the parent and request iteration on the anchor first.
+**Always read `.art/style_guide.md` at the start of every invocation.** Check the **Status** line at the top:
+
+- **`SCAFFOLD`** — no direction chosen yet. Refuse to generate; ask the parent to choose a direction first.
+- **`PRE-ANCHOR`** — direction chosen, anchor not yet selected. You may run **exploration mode** (generate candidates into `.art/candidates/`) but NOT production assets. The style guide will document the chosen direction + an "Exploration axes" table to rotate variants across.
+- **`LOCKED`** — style anchor exists at `.art/anchors/style_anchor.png` and the locked prompt prefix is in the guide. Use the prefix verbatim for production assets. This is the normal operating mode.
+
+The parent's prompt may explicitly say "exploration mode" or "candidates" — that signals exploration regardless of status. In exploration mode, save outputs to `.art/candidates/` with descriptive filenames (e.g. `arrow_tower_<variant_id>_<seed>.png`), do NOT touch `assets/sprites/`, and skip the `assets/` portion of the manifest entry (use `status: "candidate"` and `asset_path: ".art/candidates/<filename>"`).
 
 ## Standard workflow
 
