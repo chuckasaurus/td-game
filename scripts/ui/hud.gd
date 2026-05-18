@@ -52,8 +52,8 @@ func _on_tower_clicked_untoggle_build(_tower: Node) -> void:
 
 func _on_tower_placed(_tower: Node) -> void:
 	# Deselect the picker after a single placement so the cursor isn't locked.
-	# Hold Ctrl while clicking to keep building the same tower repeatedly.
-	if Input.is_key_pressed(KEY_CTRL):
+	# Hold Shift while clicking to keep building the same tower repeatedly.
+	if Input.is_key_pressed(KEY_SHIFT):
 		return
 	_deselect_picker()
 
