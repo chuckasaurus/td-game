@@ -1,6 +1,8 @@
 class_name GridManager
 extends Node2D
 
+const GROUND_TILE: Texture2D = preload("res://assets/sprites/tiles/ground/tile_ground_basic.png")
+
 ## Origin (top-left corner) of the grid in world coordinates.
 @export var grid_origin: Vector2 = Vector2(0, 64)
 @export var cell_size: int = 64
@@ -28,11 +30,30 @@ var _selected_tower: Node = null
 
 func _ready() -> void:
 	_build_path_cells()
+	_spawn_ground_sprites()
 	EventBus.tower_clicked.connect(_on_tower_clicked)
 	EventBus.tower_buffs_changed.connect(_on_tower_buffs_changed)
 	EventBus.tower_sold.connect(_on_tower_sold)
 	EventBus.tower_inspector_closed.connect(_on_inspector_closed)
 	queue_redraw()
+
+
+func _spawn_ground_sprites() -> void:
+	# One Sprite2D per non-path cell. show_behind_parent renders the sprites
+	# BEFORE GridManager's own _draw() output, so path-cell brown rects, grid
+	# lines, hover highlights, and range rings all layer on top of the ground.
+	for col in range(columns):
+		for row in range(rows):
+			var cell := Vector2i(col, row)
+			if is_path(cell):
+				continue
+			var sprite := Sprite2D.new()
+			sprite.texture = GROUND_TILE
+			sprite.position = cell_to_world_center(cell)
+			sprite.show_behind_parent = true
+			# Pixel-art friendly: no smoothing on the upscaled tile.
+			sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			add_child(sprite)
 
 
 func _process(_delta: float) -> void:
