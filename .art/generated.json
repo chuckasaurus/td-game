@@ -54,8 +54,8 @@
                         "height":  1024,
                         "anchor":  "none",
                         "comfyui_output":  "arrow_tower_B_dave_54208754_00001_.png",
-                        "asset_path":  ".art/candidates/arrow_tower_B_dave_54208754.png",
-                        "status":  "candidate"
+                        "asset_path":  ".art/anchors/style_anchor.png",
+                        "status":  "anchor"
                     },
                     {
                         "timestamp":  "2026-05-18T14:19:44Z",

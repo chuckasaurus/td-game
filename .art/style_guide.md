@@ -1,17 +1,24 @@
 # TDGame Style Guide
 
-> **Status:** PRE-ANCHOR — direction chosen, anchor PNG not yet selected.
-> Direction is locked: **pixel art, in the lineage of Stardew Valley and Dave the Diver.**
-> Use this guide for exploration runs; do NOT treat any candidate as canonical until
-> a winner is copied to `.art/anchors/style_anchor.png` and this status moves to LOCKED.
+> **Status:** LOCKED — anchor selected, production mode active.
+> Style anchor: `.art/anchors/style_anchor.png` (originally `arrow_tower_B_dave_54208754.png`, B-direction "Dave modern").
+> Locked prompt prefix and seed are in the **Standard prompt prefix** section below — use them verbatim.
+> If the visual direction needs to change in the future, generate a new exploration round, pick a new winner, and update this guide. Don't drift mid-project.
 
-## Target aesthetic
+## Target aesthetic — LOCKED
 
-**Reference points:**
-- **Stardew Valley** — cozy, warm earthy palette, soft pixel shading, friendly proportions, clean shapes
-- **Dave the Diver** — "modern HD pixel art": higher pixel density (~32–48px subjects), richer shading depth, painterly atmosphere applied to pixel sprites, more cinematic lighting
+**Direction adopted:** "Dave modern" from the first exploration round. Reference points still relevant:
+- **Stardew Valley** — warm palette, soft shading, friendly proportions
+- **Dave the Diver** — modern HD pixel art density, painterly shading, cinematic atmosphere
 
-We want the **Dave-the-Diver pixel density** with **Stardew warmth** — pixels are clearly visible but not chunky-blocky, soft-shaded with 4–6 color depths per surface, warm rather than cold palette overall.
+**Style traits locked in:**
+- 32-bit modern pixel art (medium-density pixels — clearly pixelated but not chunky-blocky)
+- **No hard outlines** — color-edge shading defines silhouettes
+- **Warm vibrant palette** — not muted, not oversaturated
+- **Painterly pixel shading with 6 color depths per surface** — soft gradients within the pixel grid
+- 3/4 isometric perspective, light source from upper-left
+
+The anchor image at `.art/anchors/style_anchor.png` is the visual truth for what this means in practice — when in doubt, look at it.
 
 ## Composition rules
 
@@ -23,28 +30,47 @@ We want the **Dave-the-Diver pixel density** with **Stardew warmth** — pixels 
 - **No text, no labels, no UI frames** on the sprite itself
 - **No 3D render look** — we want clearly pixel-quantized art, not smooth rendered
 
-## Tentative style prefix (to be locked after anchor exploration)
+## Standard prompt prefix — LOCKED
 
-Working draft of the prompt prefix the agent will use:
+Every production prompt MUST begin with this exact text:
 
 ```
-pixel art game asset, high-resolution pixel style inspired by Stardew Valley and Dave the Diver, 3/4 isometric view, soft pixel shading with 4-6 color depths per surface, warm earthy palette, clean dark outlines, light source from upper-left, single sprite centered on plain neutral background, no text, no UI
+pixel art game asset, 32-bit modern pixel art, medium pixels, no outlines, color-edge shading only, warm vibrant palette, painterly pixel shading with 6 color depths, 3/4 isometric view, light source from upper-left
 ```
 
-The exploration round will vary this prefix across stylistic axes (see "Exploration axes" below) and the winning combination becomes the locked prefix.
+## Standard prompt suffix — LOCKED
 
-## Exploration axes (for the first anchor session)
+Every production prompt MUST end with this exact text:
 
-When generating candidate sets to choose the anchor from, vary across these dimensions:
+```
+single sprite centered on plain neutral background, soft drop shadow under base, no text, no UI, fantasy tower defense game asset
+```
 
-| Axis | Variant A | Variant B | Variant C |
-|---|---|---|---|
-| Pixel density | "16-bit chunky pixels" | "32-bit modern pixel art" | "high-resolution pixel art" |
-| Outline | "clean dark outlines" | "no outlines, color-edge shading only" | "soft brown outlines" |
-| Saturation | "warm earthy muted palette" | "warm vibrant palette" | "saturated fantasy palette" |
-| Shading | "soft pixel shading, 4 color depths" | "painterly pixel shading, 6 color depths" | "flat pixel cel shading" |
+## Final prompt template
 
-The agent's exploration prompt should rotate through combinations to give us a spread.
+```
+<LOCKED PREFIX>, <subject description>, <LOCKED SUFFIX>
+```
+
+The agent only varies the `<subject description>` per asset. Prefix and suffix are immutable until the project re-anchors.
+
+## Reference: how the anchor was generated
+
+- File: `.art/candidates/arrow_tower_B_dave_54208754.png` (now also at `.art/anchors/style_anchor.png`)
+- Seed: `54208754`
+- Full prompt: see manifest entry with seed `54208754` in `.art/generated.json`
+- Resolution: 1024×1024, FLUX.1 schnell, 4 steps, CFG 1.0, euler/simple
+
+## Historical: original exploration axes
+
+Kept for reference if we ever re-explore. The chosen direction was column B (32-bit modern, no outlines, warm vibrant, painterly 6-depth).
+
+| Axis | A (Stardew) | **B (Dave) ← chosen** | C (Cozy) | D (Bold) |
+|---|---|---|---|---|
+| Pixel density | 16-bit chunky | **32-bit modern, medium pixels** | high-res small pixels | 16-bit chunky |
+| Outline | clean dark | **no outlines, color-edge only** | soft brown | clean dark |
+| Saturation | warm earthy muted | **warm vibrant** | warm vibrant | saturated fantasy |
+| Shading | 4-depth soft | **painterly 6-depth** | painterly 6-depth | flat cel |
 
 ## Resolution per asset category
 
@@ -84,13 +110,26 @@ Color identity per element. The element's primary color is ~60% of the sprite, w
 
 *Empty.* Populated by the agent as the manifest grows and the user marks assets as approved. Each entry here is a benchmark for future regenerations.
 
-## Anchor session protocol
+## Re-anchor protocol (if the project ever needs a new style)
 
-When invoking asset-forge for the first anchor session:
-1. Parent agent's prompt: "exploration mode: generate 12 Arrow Tower candidates rotating through the exploration axes in style_guide.md"
-2. Agent generates 12 PNGs into `.art/candidates/` with descriptive suffixes (e.g. `arrow_tower_a16-outline-earthy.png`)
+1. Parent agent's prompt: "exploration mode: generate N candidates for <subject>, rotating across new variants"
+2. Agent generates PNGs into `.art/candidates/` with descriptive suffixes
 3. Human picks the winner
 4. Winner is copied to `.art/anchors/style_anchor.png`
-5. The exact prompt + seed of the winner is locked into "Standard prompt prefix" section above
-6. Status moves to LOCKED
-7. Subsequent invocations use the locked prefix verbatim
+5. The exact prompt prefix of the winner is locked into the "Standard prompt prefix" section above
+6. Status moves to LOCKED, this section gets updated with the new direction details
+
+## Post-processing: transparent backgrounds
+
+The locked prompt asks for "plain neutral background" — production sprites need this stripped to alpha. Workflow:
+
+1. Generate the asset normally via the locked prompt (this produces a 1024×1024 PNG with a neutral-color background)
+2. Run background removal as a post-process before downscaling to final sprite size
+3. Downscale with nearest-neighbor to the target resolution from the category table above
+
+**Background removal options** (decide once, install once):
+- `rembg` Python CLI — install via `pip install rembg[cpu]` or `rembg[gpu]`, then `rembg i input.png output.png`. Fast, decent quality, accepts CPU or GPU.
+- `BiRefNet` — newer, much better quality especially for fine details (rope, leaves, hair); GPU-required for speed.
+- ComfyUI custom node — adds a node directly to the workflow (e.g. `ComfyUI-Inspyrenet-Rembg`), so background removal happens as part of the generation pipeline. Installable via ComfyUI-Manager.
+
+Current install: **none of the above present.** The agent currently saves PNGs with the original neutral background. Pick one of the above and update this section + the agent when ready.
