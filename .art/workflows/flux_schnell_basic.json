@@ -1,46 +1,31 @@
 {
-  "_comment": "FLUX.1 schnell basic text-to-image workflow. The asset-forge agent substitutes the placeholders below before POSTing to /prompt. Placeholders: __PROMPT__, __SEED__, __WIDTH__, __HEIGHT__, __FILENAME_PREFIX__.",
+  "_comment": "FLUX.1 schnell basic text-to-image workflow. Uses CheckpointLoaderSimple targeting the Comfy-Org all-in-one fp8 checkpoint at models/checkpoints/flux1-schnell-fp8.safetensors (UNet + CLIP + VAE bundled). The asset-forge agent substitutes the placeholders below before POSTing to /prompt. Placeholders: __PROMPT__, __SEED__, __WIDTH__, __HEIGHT__, __FILENAME_PREFIX__.",
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": "__WIDTH__",
+      "height": "__HEIGHT__",
+      "batch_size": 1
+    }
+  },
   "6": {
     "class_type": "CLIPTextEncode",
     "inputs": {
       "text": "__PROMPT__",
-      "clip": ["11", 0]
+      "clip": ["1", 1]
     }
   },
-  "8": {
-    "class_type": "VAEDecode",
+  "7": {
+    "class_type": "CLIPTextEncode",
     "inputs": {
-      "samples": ["13", 0],
-      "vae": ["10", 0]
-    }
-  },
-  "9": {
-    "class_type": "SaveImage",
-    "inputs": {
-      "filename_prefix": "__FILENAME_PREFIX__",
-      "images": ["8", 0]
-    }
-  },
-  "10": {
-    "class_type": "VAELoader",
-    "inputs": {
-      "vae_name": "ae.safetensors"
-    }
-  },
-  "11": {
-    "class_type": "DualCLIPLoader",
-    "inputs": {
-      "clip_name1": "t5xxl_fp8_e4m3fn.safetensors",
-      "clip_name2": "clip_l.safetensors",
-      "type": "flux",
-      "device": "default"
-    }
-  },
-  "12": {
-    "class_type": "UNETLoader",
-    "inputs": {
-      "unet_name": "flux1-schnell-fp8.safetensors",
-      "weight_dtype": "fp8_e4m3fn"
+      "text": "",
+      "clip": ["1", 1]
     }
   },
   "13": {
@@ -52,25 +37,24 @@
       "sampler_name": "euler",
       "scheduler": "simple",
       "denoise": 1.0,
-      "model": ["12", 0],
-      "positive": ["16", 0],
-      "negative": ["6", 0],
+      "model": ["1", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
       "latent_image": ["5", 0]
     }
   },
-  "5": {
-    "class_type": "EmptyLatentImage",
+  "8": {
+    "class_type": "VAEDecode",
     "inputs": {
-      "width": "__WIDTH__",
-      "height": "__HEIGHT__",
-      "batch_size": 1
+      "samples": ["13", 0],
+      "vae": ["1", 2]
     }
   },
-  "16": {
-    "class_type": "CLIPTextEncode",
+  "9": {
+    "class_type": "SaveImage",
     "inputs": {
-      "text": "__PROMPT__",
-      "clip": ["11", 0]
+      "filename_prefix": "__FILENAME_PREFIX__",
+      "images": ["8", 0]
     }
   }
 }

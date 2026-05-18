@@ -24,3 +24,10 @@ Thumbs.db
 /builds/
 /export.cfg
 /export_credentials.cfg
+
+# Asset generation candidates — large PNGs from exploration runs.
+# The manifest at .art/generated.json IS tracked; the candidate images
+# themselves are local-only. Winners get copied to .art/anchors/ or
+# assets/sprites/ which ARE tracked.
+/.art/candidates/
+/.art/temp/
