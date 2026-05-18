@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/soft_dot.tres" id="1_tex"]
+
+[sub_resource type="Gradient" id="grad"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.85, 0.92, 1, 0.7, 0.95, 0.98, 1, 0.6, 0.8, 0.9, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="ramp"]
+gradient = SubResource("grad")
+
+[sub_resource type="ParticleProcessMaterial" id="pm"]
+emission_shape = 1
+emission_sphere_radius = 6.0
+direction = Vector3(1, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+orbit_velocity_min = 1.0
+orbit_velocity_max = 2.0
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+scale_min = 0.2
+scale_max = 0.5
+color_ramp = SubResource("ramp")
+
+[node name="GaleParticles" type="GPUParticles2D"]
+position = Vector2(0, -55)
+amount = 20
+lifetime = 1.2
+texture = ExtResource("1_tex")
+process_material = SubResource("pm")

@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="TowerData" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="TowerData" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/elements/ice.tres" id="2"]
 [ext_resource type="Resource" path="res://data/statuses/slowed.tres" id="3"]
 
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/tower_ice_basic.png" id="sprite_tex"]
+[ext_resource type="PackedScene" path="res://scenes/effects/frost_particles.tscn" id="particles_scene"]
 [resource]
 script = ExtResource("1")
 class_id = &"frost_bolt"
@@ -20,3 +21,4 @@ on_hit_status = ExtResource("3")
 can_target_flying = false
 status_chance = 1.0
 sprite = ExtResource("sprite_tex")
+ambient_particles_scene = ExtResource("particles_scene")

@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="TowerData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="TowerData" load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/elements/air.tres" id="2"]
 
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/tower_air_basic.png" id="sprite_tex"]
+[ext_resource type="PackedScene" path="res://scenes/effects/gale_particles.tscn" id="particles_scene"]
 [resource]
 script = ExtResource("1")
 class_id = &"gale"
@@ -20,3 +21,4 @@ crit_multiplier = 3.0
 can_target_flying = true
 status_chance = 1.0
 sprite = ExtResource("sprite_tex")
+ambient_particles_scene = ExtResource("particles_scene")

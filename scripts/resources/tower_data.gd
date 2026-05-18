@@ -16,6 +16,9 @@ enum AttackKind { HOMING, LINEAR_PIERCE, BEAM_CHAIN, CLOUD_DROP }
 @export var projectile_speed: float = 400.0
 @export var sprite: Texture2D
 @export var projectile_color: Color = Color(1, 1, 0.4)
+## Scene instantiated as a child of the tower for ambient animation
+## (flame flicker, mist drift, etc.). Null = no ambient effect.
+@export var ambient_particles_scene: PackedScene
 
 ## Element (null for the universal Arrow Tower).
 @export var element: ElementData

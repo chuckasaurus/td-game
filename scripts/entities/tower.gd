@@ -17,6 +17,7 @@ var grid_cell: Vector2i = Vector2i(-1, -1)
 
 var _enemies_in_range: Array[Node] = []
 var _cooldown: float = 0.0
+var _ambient_particles: Node2D = null
 
 @onready var body: Sprite2D = $Body
 @onready var range_area: Area2D = $RangeArea
@@ -45,6 +46,13 @@ func _ready() -> void:
 func _apply_visual_from_data() -> void:
 	if body and base_data.sprite:
 		body.texture = base_data.sprite
+	# Ambient particle overlay — idempotent: drop the previous instance if any.
+	if _ambient_particles and is_instance_valid(_ambient_particles):
+		_ambient_particles.queue_free()
+		_ambient_particles = null
+	if base_data.ambient_particles_scene:
+		_ambient_particles = base_data.ambient_particles_scene.instantiate()
+		add_child(_ambient_particles)
 
 
 # ─── Buff layer ───────────────────────────────────────────────────────────
