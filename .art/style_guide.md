@@ -108,7 +108,26 @@ Color identity per element. The element's primary color is ~60% of the sprite, w
 
 ## Approved-asset reference list
 
-*Empty.* Populated by the agent as the manifest grows and the user marks assets as approved. Each entry here is a benchmark for future regenerations.
+Benchmarks for future regenerations and style consistency checks. Every kept asset is listed here with its source seed so we can reproduce or iterate.
+
+### Towers — tier 1 basics
+
+| Sprite | Element | Production path | Source candidate | Seed |
+|---|---|---|---|---|
+| Arrow Tower | (universal) | `assets/sprites/towers/tower_arrow_basic.png` | `.art/anchors/style_anchor.png` (originally `tower_B_dave_54208754`) | 54208754 |
+| Flame Tower | Fire | `assets/sprites/towers/tower_fire_basic.png` | `tower_flame_1664193671.png` | 1664193671 |
+| Frost Bolt | Ice | `assets/sprites/towers/tower_ice_basic.png` | `tower_frost_677434158.png` | 677434158 |
+| Spark | Electric | `assets/sprites/towers/tower_electric_basic.png` | `tower_spark_1340725904.png` | 1340725904 |
+| Toxin Spray | Poison | `assets/sprites/towers/tower_poison_basic.png` | `tower_toxin_397391420.png` | 397391420 |
+| Mist | Water | `assets/sprites/towers/tower_water_basic.png` | `tower_mist_228084629.png` | 228084629 |
+| Stone Thrower | Earth | `assets/sprites/towers/tower_earth_basic.png` | `tower_stonethrower_672486315.png` | 672486315 |
+| Gale | Air | `assets/sprites/towers/tower_air_basic.png` | `tower_gale_2119838968.png` | 2119838968 |
+
+All downscaled 1024×1024 → 96×96 with PIL LANCZOS. Source manifest entries marked `status: kept` (or `anchor` for Arrow).
+
+### Towers — tier 2 (deferred unlock content)
+
+10 Boulder candidates exist in `.art/candidates/` (`tower_boulder_*.png` catapult variants + `tower_boulder_ramp_*.png` ramp variants) tagged `tier: 2, unlock_status: deferred_t2_unlock` in the manifest. To be revisited when the in-run reward-card unlock system lands. Note: ramp variants need a UX solution for tower facing direction before they can ship.
 
 ## Re-anchor protocol (if the project ever needs a new style)
 
