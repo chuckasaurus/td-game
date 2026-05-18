@@ -78,13 +78,15 @@ Generation always at 1024×1024 (FLUX's native training res). Downscale to final
 
 | Category | Generation size | Final sprite size | Output path |
 |---|---|---|---|
-| Tower | 1024×1024 | 96×96 | `assets/sprites/towers/` |
-| Enemy | 1024×1024 | 48×48 | `assets/sprites/enemies/` |
-| Projectile | 1024×1024 | 24×24 | `assets/sprites/projectiles/` |
-| Status overlay | 1024×1024 | 32×32 | `assets/sprites/elements/` |
-| UI icon | 1024×1024 | 32×32 | `assets/sprites/ui/` |
-| Tile (path / ground) | 1024×1024 | 64×64 | `assets/sprites/tiles/` |
-| Element icon | 1024×1024 | 48×48 | `assets/sprites/elements/` |
+| Tower | 1024×1024 | 144×144 | `assets/sprites/towers/` |
+| Enemy | 1024×1024 | 72×72 | `assets/sprites/enemies/` |
+| Projectile | 1024×1024 | 36×36 | `assets/sprites/projectiles/` |
+| Status overlay | 1024×1024 | 48×48 | `assets/sprites/elements/` |
+| UI icon | 1024×1024 | 48×48 | `assets/sprites/ui/` |
+| Tile (path / ground) | 1024×1024 | 96×96 | `assets/sprites/tiles/` |
+| Element icon | 1024×1024 | 72×72 | `assets/sprites/elements/` |
+
+Sizing rationale: bumped 1.5× from the original spec after playtest feedback that the 96px towers were too small for the painted features (cauldron, brazier) to read at game scale — particularly affecting the shader-based pixel-color-range animations. Grid cell size moved in lockstep from 64 to 96 to keep the same sprite-to-cell ratio (~1.5×) and visual feel; the path layout was redesigned for the 20×8 grid.
 
 ## Naming convention
 

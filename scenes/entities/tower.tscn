@@ -13,7 +13,7 @@ homing_projectile_scene = ExtResource("2_proj")
 linear_projectile_scene = ExtResource("3_proj_lin")
 
 [node name="Body" type="Sprite2D" parent="."]
-position = Vector2(0, -16)
+position = Vector2(0, -24)
 centered = true
 
 [node name="RangeArea" type="Area2D" parent="."]
@@ -25,4 +25,4 @@ monitoring = true
 shape = SubResource("shape_range")
 
 [node name="Muzzle" type="Marker2D" parent="."]
-position = Vector2(0, -40)
+position = Vector2(0, -60)
