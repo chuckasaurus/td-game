@@ -28,7 +28,10 @@ You produce 2D game art assets using the project's local image-generation pipeli
 These files in the project's `.art/` directory are the contract:
 
 - **`.art/style_guide.md`** — the source of truth for visual identity. Defines the current style anchor, the standard prompt prefix, resolution per asset category, naming conventions, lighting/composition rules, element color identities, and the approved-asset reference list.
-- **`.art/workflows/flux_schnell_basic.json`** — the default text-to-image ComfyUI workflow template. Has placeholders (`__PROMPT__`, `__SEED__`, `__WIDTH__`, `__HEIGHT__`, `__FILENAME_PREFIX__`) you fill in before submission.
+- **`.art/workflows/flux_schnell_basic.json`** — text-to-image with background removal via InspyrenetRembg. Use for **sprites that overlay on the world** (towers, enemies, projectiles, decorations like trees/rocks, status icons, UI icons). The output PNG has a clean alpha channel.
+- **`.art/workflows/flux_schnell_tile.json`** — text-to-image WITHOUT background removal. Use for **tile/fill subjects where the background IS the asset** (ground textures, path tiles, sky/background panels). The output PNG is fully opaque.
+
+Both templates share the same placeholders: `__PROMPT__`, `__SEED__`, `__WIDTH__`, `__HEIGHT__`, `__FILENAME_PREFIX__`. Pick the right template based on category. When in doubt: anything that needs to sit *on top of* other art uses the basic (rembg) workflow; anything that fills a rectangle uses the tile workflow.
 - **`.art/anchors/`** — reference images. The canonical style anchor (when set) lives here as `style_anchor.png`.
 - **`.art/generated.json`** — chronological manifest of every asset produced. Append after every successful generation; never delete entries.
 
