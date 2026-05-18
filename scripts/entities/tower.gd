@@ -213,6 +213,7 @@ func _pick_target() -> Enemy:
 
 
 func _fire(target: Enemy) -> void:
+	_play_fire_animation()
 	match effective_data.attack_kind:
 		TowerData.AttackKind.LINEAR_PIERCE:
 			_fire_linear(target)
@@ -220,6 +221,18 @@ func _fire(target: Enemy) -> void:
 			_fire_beam_chain(target)
 		_:
 			_fire_homing(target)
+
+
+func _play_fire_animation() -> void:
+	# Brief squash-and-stretch pulse on the body when the tower fires.
+	# Sells the moment of firing without needing per-element content.
+	if body == null:
+		return
+	var tween := create_tween()
+	tween.tween_property(body, "scale", Vector2(1.08, 1.08), 0.05) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(body, "scale", Vector2.ONE, 0.10) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 
 func _fire_homing(target: Enemy) -> void:
