@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="TowerData" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="TowerData" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/elements/poison.tres" id="2"]
 [ext_resource type="Resource" path="res://data/statuses/poisoned.tres" id="3"]
 
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/tower_poison_basic.png" id="sprite_tex"]
+[ext_resource type="Material" path="res://data/materials/poison_bubble.tres" id="body_mat"]
 [resource]
 script = ExtResource("1")
 class_id = &"toxin_spray"
@@ -25,3 +26,4 @@ cloud_duration = 3.5
 cloud_tick_interval = 0.4
 cloud_damage_per_tick = 3
 sprite = ExtResource("sprite_tex")
+body_material = ExtResource("body_mat")

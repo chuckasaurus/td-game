@@ -46,6 +46,17 @@ func _ready() -> void:
 func _apply_visual_from_data() -> void:
 	if body and base_data.sprite:
 		body.texture = base_data.sprite
+	# Body shader material (e.g. flame flicker, cauldron bubble). Duplicate
+	# so each tower instance gets a unique phase_offset and they do not all
+	# pulse in sync.
+	if body:
+		if base_data.body_material:
+			var mat: Material = base_data.body_material.duplicate() as Material
+			if mat is ShaderMaterial:
+				(mat as ShaderMaterial).set_shader_parameter("phase_offset", randf() * 100.0)
+			body.material = mat
+		else:
+			body.material = null
 	# Ambient particle overlay — idempotent: drop the previous instance if any.
 	if _ambient_particles and is_instance_valid(_ambient_particles):
 		_ambient_particles.queue_free()
@@ -213,7 +224,6 @@ func _pick_target() -> Enemy:
 
 
 func _fire(target: Enemy) -> void:
-	_play_fire_animation()
 	match effective_data.attack_kind:
 		TowerData.AttackKind.LINEAR_PIERCE:
 			_fire_linear(target)
@@ -221,18 +231,6 @@ func _fire(target: Enemy) -> void:
 			_fire_beam_chain(target)
 		_:
 			_fire_homing(target)
-
-
-func _play_fire_animation() -> void:
-	# Brief squash-and-stretch pulse on the body when the tower fires.
-	# Sells the moment of firing without needing per-element content.
-	if body == null:
-		return
-	var tween := create_tween()
-	tween.tween_property(body, "scale", Vector2(1.08, 1.08), 0.05) \
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(body, "scale", Vector2.ONE, 0.10) \
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 
 func _fire_homing(target: Enemy) -> void:
