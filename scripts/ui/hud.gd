@@ -17,6 +17,7 @@ const POISON_ARROWS: TowerBuff = preload("res://data/buffs/poison_arrows.tres")
 @onready var victory_panel: PanelContainer = %VictoryPanel
 @onready var dev_eagle_eye_button: Button = %DevEagleEyeButton
 @onready var dev_poison_arrows_button: Button = %DevPoisonArrowsButton
+@onready var dev_all_towers_button: Button = %DevAllTowersButton
 
 var _selected_button: Button = null
 
@@ -42,6 +43,9 @@ func _ready() -> void:
 	start_wave_button.pressed.connect(_on_start_wave_pressed)
 	dev_eagle_eye_button.toggled.connect(_on_dev_eagle_toggled)
 	dev_poison_arrows_button.toggled.connect(_on_dev_poison_toggled)
+	dev_all_towers_button.toggled.connect(_on_dev_all_towers_toggled)
+	dev_all_towers_button.button_pressed = GameState.dev_all_towers_unlocked
+	GameState.dev_all_towers_changed.connect(_build_tower_buttons)
 	_build_tower_buttons()
 	call_deferred("_refresh_wave_track")
 
@@ -60,6 +64,10 @@ func _on_tower_placed(_tower: Node) -> void:
 
 func _on_cancel_build_selection() -> void:
 	_deselect_picker()
+
+
+func _on_dev_all_towers_toggled(pressed: bool) -> void:
+	GameState.dev_all_towers_unlocked = pressed
 
 
 func _on_dev_eagle_toggled(pressed: bool) -> void:
@@ -84,8 +92,11 @@ func _build_tower_buttons() -> void:
 		if not (tower_data is TowerData):
 			continue
 		# Element-bound towers only appear if their element has been drafted.
-		# Arrow Tower (no element) is always available.
-		if tower_data.element != null and not GameState.has_drafted(tower_data.element.id):
+		# Arrow Tower (no element) is always available. Dev override bypasses
+		# the draft requirement entirely.
+		if tower_data.element != null \
+				and not GameState.has_drafted(tower_data.element.id) \
+				and not GameState.dev_all_towers_unlocked:
 			continue
 		var btn := Button.new()
 		btn.text = "%s\n%dg" % [tower_data.display_name, tower_data.cost]

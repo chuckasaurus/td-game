@@ -35,6 +35,18 @@ var phase: Phase = Phase.PREPARING:
 ## Elements drafted for the current run.
 var drafted_elements: Array[ElementData] = []
 
+## Dev override: when true, the tower picker shows every tower regardless
+## of which elements have been drafted. Persists across runs so testing
+## stays convenient.
+var dev_all_towers_unlocked: bool = false:
+	set(value):
+		if dev_all_towers_unlocked == value:
+			return
+		dev_all_towers_unlocked = value
+		dev_all_towers_changed.emit()
+
+signal dev_all_towers_changed
+
 
 func _ready() -> void:
 	EventBus.enemy_killed.connect(_on_enemy_killed)

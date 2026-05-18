@@ -57,6 +57,13 @@ custom_constants/separation = 6
 [node name="Spacer" type="Control" parent="BottomBar/BottomRow"]
 size_flags_horizontal = 3
 
+[node name="DevAllTowersButton" type="Button" parent="BottomBar/BottomRow"]
+unique_name_in_owner = true
+toggle_mode = true
+custom_minimum_size = Vector2(150, 60)
+text = "DEV
+All Towers"
+
 [node name="DevEagleEyeButton" type="Button" parent="BottomBar/BottomRow"]
 unique_name_in_owner = true
 toggle_mode = true
