@@ -19,6 +19,10 @@ enum AttackKind { HOMING, LINEAR_PIERCE, BEAM_CHAIN, CLOUD_DROP }
 ## Scene instantiated as a child of the tower for ambient animation
 ## (flame flicker, mist drift, etc.). Null = no ambient effect.
 @export var ambient_particles_scene: PackedScene
+## Material applied to the tower's body Sprite2D for sprite-integrated
+## ambient animation — typically a ShaderMaterial that animates pixels
+## in a specific color range (e.g. flame flicker, cauldron bubble).
+@export var body_material: Material
 
 ## Element (null for the universal Arrow Tower).
 @export var element: ElementData
