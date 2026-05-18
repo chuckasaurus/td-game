@@ -1,5 +1,4 @@
 {
-  "_comment": "FLUX.1 schnell text-to-image workflow for TILES and BACKGROUND-FILL subjects (ground, path, large environment pieces). Identical to flux_schnell_basic.json except the InspyrenetRembg background-removal step is omitted, so the output PNG retains its full opaque background. Use this for subjects whose 'background' IS the asset (a grass texture, a stone path piece, a sky panel). Use flux_schnell_basic.json (with rembg) for subjects that sit on top of a tile (towers, enemies, decorations, projectiles, status overlays). Placeholders the asset-forge agent substitutes: __PROMPT__, __SEED__, __WIDTH__, __HEIGHT__, __FILENAME_PREFIX__.",
   "1": {
     "class_type": "CheckpointLoaderSimple",
     "inputs": {

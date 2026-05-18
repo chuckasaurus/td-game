@@ -1,5 +1,4 @@
 {
-  "_comment": "FLUX.1 schnell text-to-image workflow with automatic background removal via InspyrenetRembg (transparent-background library). Pipeline: CheckpointLoaderSimple -> CLIPTextEncode -> KSampler -> VAEDecode -> InspyrenetRembg -> SaveImage. The output PNG has a proper alpha channel. Placeholders the asset-forge agent substitutes: __PROMPT__, __SEED__, __WIDTH__, __HEIGHT__, __FILENAME_PREFIX__.",
   "1": {
     "class_type": "CheckpointLoaderSimple",
     "inputs": {

@@ -112,6 +112,30 @@ Color identity per element. The element's primary color is ~60% of the sprite, w
 
 Environment art (ground, path, endpoints, decorations) is a separate generation track from tower/enemy/projectile sprites. Key differences:
 
+### Ground anchor — LOCKED
+
+- File: `.art/anchors/ground_anchor.png` (originally `ground_grass_dense_A_lush_1657454243.png`)
+- Variant: **A_lush** — dense vibrant green meadow grass with full coverage, no patchiness
+- Seed: `1657454243`
+- Full prompt: see manifest entry with seed `1657454243` in `.art/generated.json`
+- Production sprite: `assets/sprites/tiles/ground/tile_ground_basic.png` (downscaled 1024 → 96, LANCZOS)
+
+The ground anchor establishes the world's environment style — Shadow of the Colossus mood, abandoned/mossy/crumbling, full grass coverage rather than scattered patches. Future ground variants (for visual variety per cell) and path tiles should be generated to feel cohesive with this anchor, using the same prefix/suffix and similar palette.
+
+### Locked tile prompt prefix and suffix
+
+For all environment generation, use:
+
+**Prefix:**
+```
+pixel art game texture, 32-bit modern pixel art, medium pixels, no outlines, painterly pixel shading with 6 color depths
+```
+
+**Suffix:**
+```
+top-down ground texture viewed straight from above, edge-to-edge fill texture, no border, no margins, no objects on top, no characters, just the ground material, abandoned ruins atmosphere, Shadow of the Colossus mood
+```
+
 ### Workflow choice
 
 | Category | Workflow | Reason |
