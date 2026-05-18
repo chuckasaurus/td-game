@@ -108,6 +108,66 @@ Color identity per element. The element's primary color is ~60% of the sprite, w
 | Air | pale grey-white | sky blue, silver | bright white | wispy, fast |
 | Poison | toxic green | sickly chartreuse, bruise purple | acidic yellow drips | toxic, organic |
 
+## Environment art
+
+Environment art (ground, path, endpoints, decorations) is a separate generation track from tower/enemy/projectile sprites. Key differences:
+
+### Workflow choice
+
+| Category | Workflow | Reason |
+|---|---|---|
+| Ground tiles | `flux_schnell_tile.json` (no rembg) | Edge-to-edge fill; the "background" IS the asset |
+| Path tiles | `flux_schnell_tile.json` | Same |
+| Sky / large backgrounds | `flux_schnell_tile.json` | Same |
+| Endpoints (castle, cave) | usually `flux_schnell_basic.json` | Sits on top of a ground tile, needs alpha |
+| Decorations (trees, rocks, mushrooms) | `flux_schnell_basic.json` | Sits on top of ground, needs alpha |
+
+### Path tile shape system (forward-compatible with junctions)
+
+Each path cell is tagged with a **4-bit neighbor bitmask** describing which of its 4 sides have a path neighbor:
+
+- bit 0 (1): top has path
+- bit 1 (2): right has path
+- bit 2 (4): bottom has path
+- bit 3 (8): left has path
+
+Bitmask → tile shape mapping covers all 16 combinations. The current snake path uses only 6:
+
+| Bitmask | Shape | Sprite filename |
+|---|---|---|
+| 0b0101 (5) | Horizontal (L+R) | `tile_path_horizontal.png` |
+| 0b1010 (10) | Vertical (T+B) | `tile_path_vertical.png` |
+| 0b0110 (6) | Corner TR (T+R) | `tile_path_corner_tr.png` |
+| 0b1001 (9) | Corner TL (T+L) | `tile_path_corner_tl.png` |
+| 0b0011 (3) | Corner BR (B+R) | `tile_path_corner_br.png` |
+| 0b1100 (12) | Corner BL (B+L) | `tile_path_corner_bl.png` |
+
+Future additions (generate when first needed by an actual path):
+
+| Bitmask | Shape | Sprite |
+|---|---|---|
+| 0b0111 (7) | T-junction, top closed (opens R, B, L) | `tile_path_t_top_closed.png` |
+| 0b1011 (11) | T-junction, right closed | `tile_path_t_right_closed.png` |
+| 0b1101 (13) | T-junction, bottom closed | `tile_path_t_bottom_closed.png` |
+| 0b1110 (14) | T-junction, left closed | `tile_path_t_left_closed.png` |
+| 0b1111 (15) | 4-way cross | `tile_path_cross.png` |
+| 0b0001..0b1000 | Single-side dead ends (×4) | spawn/exit endpoints handle these instead |
+
+The renderer computes each path cell's bitmask from `GridManager.path_waypoints` and looks up the corresponding sprite. Adding intersections later is content work (generate the missing sprites), not a code refactor.
+
+### Ground tile variants
+
+Multiple non-tiling variants per terrain type prevent the obvious tiled-repetition look. Recommended: 3–4 variants per terrain. Assigned per cell with a deterministic seed from cell coords so a given map renders identically each load.
+
+### Resolution per environment category
+
+| Category | Generation | Final | Path |
+|---|---|---|---|
+| Ground tile | 1024×1024 | 96×96 | `assets/sprites/tiles/ground/` |
+| Path tile | 1024×1024 | 96×96 | `assets/sprites/tiles/path/` |
+| Decoration | 1024×1024 | 48–72 | `assets/sprites/decorations/` |
+| Endpoint (spawn / goal) | 1024×1024 | 144×144 | `assets/sprites/endpoints/` |
+
 ## Approved-asset reference list
 
 Benchmarks for future regenerations and style consistency checks. Every kept asset is listed here with its source seed so we can reproduce or iterate.
