@@ -18,8 +18,7 @@ var grid_cell: Vector2i = Vector2i(-1, -1)
 var _enemies_in_range: Array[Node] = []
 var _cooldown: float = 0.0
 
-@onready var body: Polygon2D = $Body
-@onready var body_accent: Polygon2D = $BodyAccent
+@onready var body: Sprite2D = $Body
 @onready var range_area: Area2D = $RangeArea
 @onready var range_shape: CollisionShape2D = $RangeArea/CollisionShape2D
 @onready var muzzle: Marker2D = $Muzzle
@@ -44,11 +43,8 @@ func _ready() -> void:
 
 
 func _apply_visual_from_data() -> void:
-	if base_data.element and body:
-		var c := base_data.element.color
-		body.color = c
-		if body_accent:
-			body_accent.color = Color(c.r * 0.5, c.g * 0.5, c.b * 0.5, 1)
+	if body and base_data.sprite:
+		body.texture = base_data.sprite
 
 
 # ─── Buff layer ───────────────────────────────────────────────────────────

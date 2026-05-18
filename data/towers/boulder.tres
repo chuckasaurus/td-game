@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="TowerData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="TowerData" load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1"]
 [ext_resource type="Resource" path="res://data/elements/earth.tres" id="2"]
 [ext_resource type="Resource" path="res://data/statuses/stunned.tres" id="3"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/tower_earth_basic.png" id="sprite_tex"]
 [resource]
 script = ExtResource("1")
 class_id = &"boulder"
@@ -23,3 +24,4 @@ attack_kind = 1
 linear_speed = 260.0
 linear_lifetime = 2.2
 linear_pierce_falloff = 1.0
+sprite = ExtResource("sprite_tex")
