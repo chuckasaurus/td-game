@@ -8,7 +8,7 @@
 [ext_resource type="Resource" path="res://data/towers/spark.tres" id="6_spark"]
 [ext_resource type="Resource" path="res://data/towers/toxin_spray.tres" id="7_toxin"]
 [ext_resource type="Resource" path="res://data/towers/mist.tres" id="8_mist"]
-[ext_resource type="Resource" path="res://data/towers/boulder.tres" id="9_boulder"]
+[ext_resource type="Resource" path="res://data/towers/stone_thrower.tres" id="9_stone"]
 [ext_resource type="Resource" path="res://data/towers/gale.tres" id="10_gale"]
 [ext_resource type="PackedScene" path="res://scenes/ui/element_draft_panel.tscn" id="11_draft"]
 [ext_resource type="Script" path="res://scripts/managers/run_controller.gd" id="12_run"]
@@ -26,7 +26,7 @@
 
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
 spawner_path = NodePath("../Map01/WaveSpawner")
-available_towers = Array[Resource]([ExtResource("3_arrow"), ExtResource("4_flame"), ExtResource("5_frost"), ExtResource("6_spark"), ExtResource("7_toxin"), ExtResource("8_mist"), ExtResource("9_boulder"), ExtResource("10_gale")])
+available_towers = Array[Resource]([ExtResource("3_arrow"), ExtResource("4_flame"), ExtResource("5_frost"), ExtResource("6_spark"), ExtResource("7_toxin"), ExtResource("8_mist"), ExtResource("9_stone"), ExtResource("10_gale")])
 
 [node name="ElementDraftPanel" parent="HUD" instance=ExtResource("11_draft")]
 
