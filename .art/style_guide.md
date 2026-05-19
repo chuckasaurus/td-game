@@ -138,13 +138,15 @@ For all environment generation, use:
 
 **Prefix:**
 ```
-pixel art game texture, 32-bit modern pixel art, medium pixels, no outlines, painterly pixel shading with 6 color depths
+pixel art game texture, 32-bit modern pixel art, medium pixels, no outlines, painterly pixel shading with 6 color depths, 3/4 isometric view from above with slight downward tilt, light source from upper-left
 ```
 
 **Suffix:**
 ```
-top-down ground texture viewed straight from above, edge-to-edge fill texture, no border, no margins, no objects on top, no characters, just the ground material, abandoned ruins atmosphere, Shadow of the Colossus mood
+edge-to-edge fill texture, no border, no margins, no characters, just the ground material, abandoned ruins atmosphere, Shadow of the Colossus mood
 ```
+
+**Perspective note:** environment art must use the SAME 3/4 isometric view as the tower sprites (their locked prefix already specifies this). Pure top-down ground produces a perspective mismatch — towers look like they're floating on a flat carpet rather than standing on the ground. Subtle dimensionality in the ground (grass blades that visibly stand up, stones with visible height) sells the world. Lesson from the first locked-background pass.
 
 ### Workflow choice
 
