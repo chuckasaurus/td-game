@@ -1,14 +1,6 @@
 class_name GridManager
 extends Node2D
 
-# Ground tile variants. Each non-path cell deterministically picks one based
-# on its coordinates so the map renders identically each load. Add new
-# variants to the bottom of the list to grow the rotation; do not reorder
-# existing entries or cells will swap textures.
-const GROUND_TILES: Array[Texture2D] = [
-	preload("res://assets/sprites/tiles/ground/tile_ground_basic.png"),
-]
-
 ## Origin (top-left corner) of the grid in world coordinates.
 @export var grid_origin: Vector2 = Vector2(0, 64)
 @export var cell_size: int = 64
@@ -36,40 +28,11 @@ var _selected_tower: Node = null
 
 func _ready() -> void:
 	_build_path_cells()
-	_spawn_ground_sprites()
 	EventBus.tower_clicked.connect(_on_tower_clicked)
 	EventBus.tower_buffs_changed.connect(_on_tower_buffs_changed)
 	EventBus.tower_sold.connect(_on_tower_sold)
 	EventBus.tower_inspector_closed.connect(_on_inspector_closed)
 	queue_redraw()
-
-
-func _spawn_ground_sprites() -> void:
-	# One Sprite2D per non-path cell. show_behind_parent renders the sprites
-	# BEFORE GridManager's own _draw() output, so path-cell brown rects, grid
-	# lines, hover highlights, and range rings all layer on top of the ground.
-	var variant_count := GROUND_TILES.size()
-	for col in range(columns):
-		for row in range(rows):
-			var cell := Vector2i(col, row)
-			if is_path(cell):
-				continue
-			var sprite := Sprite2D.new()
-			sprite.texture = GROUND_TILES[_ground_variant_for(cell, variant_count)]
-			sprite.position = cell_to_world_center(cell)
-			sprite.show_behind_parent = true
-			# Pixel-art friendly: no smoothing on the upscaled tile.
-			sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-			add_child(sprite)
-
-
-func _ground_variant_for(cell: Vector2i, variant_count: int) -> int:
-	# Deterministic per-cell variant pick. Same cell -> same variant on every
-	# load. Two distinct primes per axis avoid obvious diagonal patterns.
-	if variant_count <= 1:
-		return 0
-	var h := cell.x * 73 + cell.y * 179
-	return ((h % variant_count) + variant_count) % variant_count
 
 
 func _process(_delta: float) -> void:

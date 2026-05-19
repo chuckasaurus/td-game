@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="1_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/entities/tower.tscn" id="2_tower"]
@@ -13,6 +13,7 @@
 [ext_resource type="Resource" path="res://data/waves/wave_06.tres" id="11_w6"]
 [ext_resource type="Resource" path="res://data/waves/wave_07.tres" id="12_w7"]
 [ext_resource type="Resource" path="res://data/waves/wave_08.tres" id="13_w8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/backgrounds/map_01_background.png" id="14_bg"]
 
 [sub_resource type="Curve2D" id="curve_path"]
 _data = {
@@ -27,6 +28,11 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 color = Color(0.12, 0.14, 0.18, 1)
 mouse_filter = 2
+
+[node name="MapBackground" type="Sprite2D" parent="."]
+position = Vector2(960, 528)
+texture = ExtResource("14_bg")
+texture_filter = 1
 
 [node name="GridManager" type="Node2D" parent="."]
 script = ExtResource("3_grid")

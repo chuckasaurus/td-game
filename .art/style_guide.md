@@ -112,15 +112,25 @@ Color identity per element. The element's primary color is ~60% of the sprite, w
 
 Environment art (ground, path, endpoints, decorations) is a separate generation track from tower/enemy/projectile sprites. Key differences:
 
-### Ground anchor — LOCKED
+### Architecture: single large background per map (not tiles)
+
+Per-cell ground tiles produced obvious tessellation artifacts even with multiple variants — FLUX doesn't generate seamlessly-tiling textures. The architecture is **one large painted background per map** rather than tiled cells. Each new map gets its own background image at the playable-area resolution (1920×768 for the standard map size). Path cells continue to render as separate path-tile sprites overlaid on the background; decorations (trees, rocks) can be placed individually on buildable cells.
+
+### Ground style reference
 
 - File: `.art/anchors/ground_anchor.png` (originally `ground_grass_dense_A_lush_1657454243.png`)
-- Variant: **A_lush** — dense vibrant green meadow grass with full coverage, no patchiness
 - Seed: `1657454243`
-- Full prompt: see manifest entry with seed `1657454243` in `.art/generated.json`
-- Production sprite: `assets/sprites/tiles/ground/tile_ground_basic.png` (downscaled 1024 → 96, LANCZOS)
+- Kept as a **style reference only** — the dense-grass aesthetic informs background prompts. No longer used as a per-cell tile.
+- Production sprite `assets/sprites/tiles/ground/tile_ground_basic.png` is deprecated (was the per-cell rendering approach we abandoned).
 
-The ground anchor establishes the world's environment style — Shadow of the Colossus mood, abandoned/mossy/crumbling, full grass coverage rather than scattered patches. Future ground variants (for visual variety per cell) and path tiles should be generated to feel cohesive with this anchor, using the same prefix/suffix and similar palette.
+### Map 01 background — LOCKED
+
+- File: `assets/sprites/backgrounds/map_01_background.png` (1920×768)
+- Source: `background_map_01_348880206.png`
+- Seed: `348880206`
+- Full prompt: see manifest entry with seed `348880206`, category `background`
+- Visual: wide dusty-sage overgrown grass field, Shadow of the Colossus mood, scattered weathered stone fragments
+- Rendered via `MapBackground` Sprite2D in `map_01.tscn` (centered at `(960, 528)` which is the grid area's midpoint)
 
 ### Locked tile prompt prefix and suffix
 
